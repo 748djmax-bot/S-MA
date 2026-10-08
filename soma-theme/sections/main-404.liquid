@@ -1,0 +1,17 @@
+{% comment %}
+  404 — señal perdida.
+{% endcomment %}
+
+<section class="pagina error-404">
+  <span class="corte" aria-hidden="true"></span>
+  <p class="etiqueta suave">404 — {{ settings.coordenadas }}</p>
+  <h1 class="display-xl">{{ 'error_404.titulo' | t }}</h1>
+  <p class="subtitulo suave">{{ 'error_404.texto' | t }}</p>
+  <a class="boton boton--primario" href="{{ routes.root_url }}">{{ 'error_404.volver' | t }}</a>
+</section>
+
+{% schema %}
+{
+  "name": "404"
+}
+{% endschema %}

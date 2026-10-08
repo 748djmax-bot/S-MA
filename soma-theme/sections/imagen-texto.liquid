@@ -1,0 +1,60 @@
+{% comment %}
+  Plantilla B del sistema: columna de texto en 4/12 + fotografía en 8/12.
+{% endcomment %}
+
+<section class="seccion{% if section.settings.galeria %} tema-galeria{% endif %}" {% if section.settings.galeria %}style="background: var(--fondo); color: var(--tinta)"{% endif %}>
+  <div class="pagina">
+    <div class="grid-12 split{% if section.settings.invertido %} split--invertido{% endif %}">
+      <div class="split__texto">
+        {% if section.settings.etiqueta != blank %}
+          <p class="etiqueta suave">{{ section.settings.etiqueta | escape }}</p>
+        {% endif %}
+        {% if section.settings.titulo != blank %}
+          <h2 class="display-l">{{ section.settings.titulo | escape }}</h2>
+        {% endif %}
+        {% if section.settings.texto != blank %}
+          <div class="cuerpo rte">{{ section.settings.texto }}</div>
+        {% endif %}
+        {% if section.settings.credito != blank %}
+          <p class="micro suave">{{ section.settings.credito | escape }}</p>
+        {% endif %}
+        {% if section.settings.boton_texto != blank %}
+          <p><a class="boton boton--fantasma" href="{{ section.settings.boton_url }}">{{ section.settings.boton_texto | escape }}</a></p>
+        {% endif %}
+      </div>
+
+      <div class="split__media revelado{% if settings.grano %} grano{% endif %}">
+        {% if section.settings.imagen != blank %}
+          {{
+            section.settings.imagen
+            | image_url: width: 1800
+            | image_tag: loading: 'lazy', widths: '600, 900, 1200, 1800', sizes: '(min-width: 1024px) 66vw, 100vw', alt: section.settings.imagen.alt
+          }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Imagen + texto",
+  "settings": [
+    { "type": "image_picker", "id": "imagen", "label": "Imagen" },
+    { "type": "checkbox", "id": "invertido", "label": "Imagen a la izquierda", "default": false },
+    { "type": "checkbox", "id": "galeria", "label": "Usar tema Galería (claro)", "default": false },
+    { "type": "text", "id": "etiqueta", "label": "Etiqueta", "default": "02 — LOOKBOOK" },
+    { "type": "text", "id": "titulo", "label": "Título", "default": "WORN AFTER DARK." },
+    {
+      "type": "richtext",
+      "id": "texto",
+      "label": "Texto",
+      "default": "<p>Fotografiado de noche, en arquitectura real. Luz de sodio. Concreto.</p>"
+    },
+    { "type": "text", "id": "credito", "label": "Créditos", "default": "FOTO — [NOMBRE] · MODELO — [NOMBRE] · MÚSICA — [NOMBRE]" },
+    { "type": "text", "id": "boton_texto", "label": "Texto del enlace", "default": "Ver lookbook" },
+    { "type": "url", "id": "boton_url", "label": "Enlace" }
+  ],
+  "presets": [{ "name": "Imagen + texto" }]
+}
+{% endschema %}

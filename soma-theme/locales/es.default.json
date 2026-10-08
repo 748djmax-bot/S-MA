@@ -1,0 +1,123 @@
+{
+  "general": {
+    "saltar": "Saltar al contenido",
+    "menu": "Menú",
+    "cerrar": "Cerrar",
+    "buscar": "Buscar",
+    "cuenta": "Cuenta",
+    "bolsa": "Bolsa",
+    "inicio": "Inicio",
+    "ver_todo": "Ver todo",
+    "anterior": "Anterior",
+    "siguiente": "Siguiente",
+    "pagina": "Página {{ page }}"
+  },
+  "producto": {
+    "anadir": "Añadir a la bolsa",
+    "agotado": "Agotado.",
+    "no_disponible": "No disponible",
+    "anadido": "Añadido.",
+    "ver_bolsa": "Ver bolsa",
+    "error": "No se pudo añadir.",
+    "cantidad": "Cantidad",
+    "disminuir": "Disminuir cantidad",
+    "aumentar": "Aumentar cantidad",
+    "ficha": "Ficha técnica",
+    "codigo": "Código",
+    "edicion": "Edición",
+    "sku": "SKU",
+    "descripcion": "Descripción",
+    "envios": "Envíos y cambios",
+    "drop": "Drop",
+    "core": "Core",
+    "nuevo": "New",
+    "edicion_limitada": "{{ count }} piezas. Sin reposición.",
+    "sin_imagen": "Sin imagen",
+    "precio_desde": "Desde {{ price }}",
+    "precio_regular": "Precio regular",
+    "precio_oferta": "Precio"
+  },
+  "coleccion": {
+    "piezas": {
+      "one": "{{ count }} pieza",
+      "other": "{{ count }} piezas"
+    },
+    "ordenar": "Ordenar",
+    "vacia": "Sin piezas por ahora.",
+    "todas": "Todo"
+  },
+  "colecciones": {
+    "titulo": "Colecciones"
+  },
+  "bolsa": {
+    "titulo": "Bolsa",
+    "vacia": "La bolsa está vacía.",
+    "seguir": "Ver colección",
+    "eliminar": "Eliminar",
+    "subtotal": "Subtotal",
+    "impuestos": "Impuestos y envío se calculan en el pago.",
+    "pagar": "Pagar",
+    "actualizar": "Actualizar",
+    "nota": "Nota del pedido",
+    "descuento": "Descuento"
+  },
+  "busqueda": {
+    "titulo": "Búsqueda",
+    "placeholder": "Buscar pieza, código, colección",
+    "enviar": "Buscar",
+    "sin_resultados": "Sin resultados para «{{ terms }}».",
+    "resultados": {
+      "one": "{{ count }} resultado para «{{ terms }}»",
+      "other": "{{ count }} resultados para «{{ terms }}»"
+    }
+  },
+  "blog": {
+    "leer": "Leer",
+    "comentarios": "Comentarios",
+    "comentar": "Comentar",
+    "nombre": "Nombre",
+    "email": "Email",
+    "mensaje": "Mensaje",
+    "enviar": "Enviar",
+    "moderado": "Comentario enviado. Se publica tras moderación.",
+    "publicado": "Comentario publicado.",
+    "volver": "Volver al diario"
+  },
+  "acceso": {
+    "email": "Email",
+    "enviar": "Entrar",
+    "gracias": "Dentro. Recibirás la señal antes que nadie."
+  },
+  "contacto": {
+    "nombre": "Nombre",
+    "email": "Email",
+    "telefono": "Teléfono",
+    "mensaje": "Mensaje",
+    "enviar": "Enviar",
+    "gracias": "Mensaje recibido."
+  },
+  "error_404": {
+    "titulo": "Señal perdida.",
+    "texto": "La página no existe o ya no está disponible.",
+    "volver": "Volver al inicio"
+  },
+  "password": {
+    "titulo": "Próximamente.",
+    "password": "Contraseña",
+    "entrar": "Entrar",
+    "admin": "¿Eres el propietario de la tienda?",
+    "admin_link": "Accede aquí"
+  },
+  "gift_card": {
+    "titulo": "Tarjeta de regalo",
+    "expirada": "Esta tarjeta de regalo ha expirado.",
+    "expira": "Expira el {{ expires_on }}",
+    "usar": "Usa este código en el pago.",
+    "wallet": "Añadir a Apple Wallet",
+    "tarjeta": "Tarjeta de regalo"
+  },
+  "footer": {
+    "derechos": "Todos los derechos reservados.",
+    "pagos": "Métodos de pago"
+  }
+}

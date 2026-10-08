@@ -1,0 +1,115 @@
+{% comment %}
+  Bolsa: líneas con hairline (8/12) y resumen sticky (4/12).
+{% endcomment %}
+
+<section class="pagina bolsa">
+  <div class="cabecera-seccion" style="margin-bottom: var(--space-8)">
+    <h1 class="display-l">{{ 'bolsa.titulo' | t }}</h1>
+    <span class="etiqueta suave" data-bolsa-cuenta>[{{ cart.item_count }}]</span>
+  </div>
+
+  {% if cart.item_count == 0 %}
+    <div class="vacio">
+      <p class="titulo">{{ 'bolsa.vacia' | t }}</p>
+      <a class="boton boton--primario" href="{{ routes.all_products_collection_url }}">{{ 'bolsa.seguir' | t }}</a>
+    </div>
+  {% else %}
+    <form action="{{ routes.cart_url }}" method="post" novalidate data-form-bolsa>
+      <div class="grid-12">
+        <ul class="bolsa__items" role="list">
+          {% for item in cart.items %}
+            <li class="linea-bolsa">
+              <a class="linea-bolsa__media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+                {% if item.image %}
+                  {{ item.image | image_url: width: 300 | image_tag: loading: 'lazy', alt: '' }}
+                {% endif %}
+              </a>
+
+              <div class="linea-bolsa__info">
+                <span class="etiqueta suave">{{ item.product.metafields.soma.codigo.value | default: settings.codigo_coleccion }}</span>
+                <a class="nombre-producto" href="{{ item.url }}" style="text-decoration: none">{{ item.product.title | escape }}</a>
+                {% unless item.product.has_only_default_variant %}
+                  <span class="etiqueta suave">{{ item.variant.title | escape }}</span>
+                {% endunless %}
+                {% for propiedad in item.properties %}
+                  {% unless propiedad.last == blank or propiedad.first contains '_' %}
+                    <span class="etiqueta suave">{{ propiedad.first }}: {{ propiedad.last }}</span>
+                  {% endunless %}
+                {% endfor %}
+                {% for descuento in item.line_level_discount_allocations %}
+                  <span class="etiqueta acento">{{ descuento.discount_application.title }} (−{{ descuento.amount | money }})</span>
+                {% endfor %}
+
+                <div class="linea-bolsa__acciones">
+                  <div class="cantidad">
+                    <button type="button" data-paso="-1" aria-label="{{ 'producto.disminuir' | t }}">−</button>
+                    <input
+                      type="number"
+                      name="updates[]"
+                      value="{{ item.quantity }}"
+                      min="0"
+                      inputmode="numeric"
+                      aria-label="{{ 'producto.cantidad' | t }} — {{ item.product.title | escape }}"
+                    >
+                    <button type="button" data-paso="1" aria-label="{{ 'producto.aumentar' | t }}">+</button>
+                  </div>
+                  <a class="boton boton--fantasma" href="{{ item.url_to_remove }}">{{ 'bolsa.eliminar' | t }}</a>
+                </div>
+              </div>
+
+              <div class="linea-bolsa__precio">
+                {% if item.original_line_price != item.final_line_price %}
+                  <s class="suave">{{ item.original_line_price | money }}</s><br>
+                {% endif %}
+                {{ item.final_line_price | money }}
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+
+        <div class="bolsa__resumen">
+          <div class="resumen">
+            {% for descuento in cart.cart_level_discount_applications %}
+              <div class="resumen__fila acento">
+                <span>{{ 'bolsa.descuento' | t }} — {{ descuento.title }}</span>
+                <span>−{{ descuento.total_allocated_amount | money }}</span>
+              </div>
+            {% endfor %}
+
+            <div class="resumen__fila resumen__fila--total">
+              <span>{{ 'bolsa.subtotal' | t }}</span>
+              <span>{{ cart.total_price | money_with_currency }}</span>
+            </div>
+            <p class="cuerpo-s suave">{{ 'bolsa.impuestos' | t }}</p>
+
+            {% if section.settings.mostrar_nota %}
+              <div class="campo">
+                <label class="campo__label" for="bolsa-nota">{{ 'bolsa.nota' | t }}</label>
+                <textarea class="campo__input" id="bolsa-nota" name="note">{{ cart.note }}</textarea>
+              </div>
+            {% endif %}
+
+            <button type="submit" name="checkout" class="boton boton--primario boton--bloque">{{ 'bolsa.pagar' | t }}</button>
+            <noscript>
+              <button type="submit" name="update" class="boton boton--secundario boton--bloque">{{ 'bolsa.actualizar' | t }}</button>
+            </noscript>
+
+            {% if additional_checkout_buttons and section.settings.pagos_express %}
+              <div>{{ content_for_additional_checkout_buttons }}</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </form>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Bolsa",
+  "settings": [
+    { "type": "checkbox", "id": "mostrar_nota", "label": "Nota del pedido", "default": false },
+    { "type": "checkbox", "id": "pagos_express", "label": "Botones de pago express", "default": true }
+  ]
+}
+{% endschema %}

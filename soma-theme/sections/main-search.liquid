@@ -1,0 +1,61 @@
+{% comment %}
+  Búsqueda: barra como línea completa con hairline y resultados en el grid de producto.
+{% endcomment %}
+
+<section class="pagina coleccion__cabecera">
+  <h1 class="display-l">{{ 'busqueda.titulo' | t }}</h1>
+
+  <form class="busqueda-linea" action="{{ routes.search_url }}" method="get" role="search" style="border-bottom: 1px solid var(--linea-fuerte); margin-top: var(--space-8)">
+    <label class="sr-only" for="busqueda-pagina">{{ 'busqueda.titulo' | t }}</label>
+    <input
+      id="busqueda-pagina"
+      type="search"
+      name="q"
+      value="{{ search.terms | escape }}"
+      placeholder="{{ 'busqueda.placeholder' | t }}"
+    >
+    <input type="hidden" name="options[prefix]" value="last">
+    <button type="submit" class="boton boton--fantasma">{{ 'busqueda.enviar' | t }}</button>
+  </form>
+
+  {% if search.performed %}
+    <p class="etiqueta suave" style="margin-top: var(--space-4)" role="status">
+      {% if search.results_count == 0 %}
+        {{ 'busqueda.sin_resultados' | t: terms: search.terms }}
+      {% else %}
+        {{ 'busqueda.resultados' | t: count: search.results_count, terms: search.terms }}
+      {% endif %}
+    </p>
+  {% endif %}
+</section>
+
+{% if search.performed and search.results_count > 0 %}
+  {% paginate search.results by 24 %}
+    <div class="pagina" style="padding-left: 0; padding-right: 0">
+      <ul class="grid-producto" role="list">
+        {% for item in search.results %}
+          <li>
+            {% if item.object_type == 'product' %}
+              {% render 'tarjeta-producto', product: item, indice: forloop.index %}
+            {% else %}
+              <article class="tarjeta">
+                <p class="etiqueta suave">{{ item.object_type | upcase }}</p>
+                <h2 class="nombre-producto"><a href="{{ item.url }}" style="text-decoration: none">{{ item.title | escape }}</a></h2>
+                <p class="cuerpo-s suave">{{ item.content | strip_html | truncatewords: 24 }}</p>
+              </article>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% render 'paginacion', paginate: paginate %}
+  {% endpaginate %}
+{% endif %}
+
+<div style="height: var(--space-16)"></div>
+
+{% schema %}
+{
+  "name": "Búsqueda"
+}
+{% endschema %}

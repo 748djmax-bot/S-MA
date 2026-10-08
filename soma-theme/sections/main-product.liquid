@@ -1,0 +1,245 @@
+{% comment %}
+  Producto SØMA: galería vertical 8/12 + ficha técnica sticky 4/12,
+  un único botón primario «AÑADIR A LA BOLSA».
+
+  Metacampos opcionales del producto (namespace «soma»):
+  - soma.codigo  (texto de una línea)  → «SØ/001»
+  - soma.edicion (entero)             → 150
+  - soma.ficha   (texto multilínea)    → una línea por dato, «Clave: Valor»
+                                          p. ej. «Material: Ripstop 210D»
+{% endcomment %}
+
+{%- liquid
+  assign variante = product.selected_or_first_available_variant
+  assign codigo = product.metafields.soma.codigo.value | default: settings.codigo_coleccion
+  assign edicion = product.metafields.soma.edicion.value
+  assign ficha = product.metafields.soma.ficha.value
+  assign tags_lower = product.tags | join: ',' | downcase | split: ','
+-%}
+
+<section
+  class="producto"
+  data-producto
+  data-money-format="{{ shop.money_format | escape }}"
+  data-txt-anadir="{{ 'producto.anadir' | t }}"
+  data-txt-agotado="{{ 'producto.agotado' | t }}"
+  data-txt-no-disponible="{{ 'producto.no_disponible' | t }}"
+  data-txt-anadido="{{ 'producto.anadido' | t }}"
+  data-txt-ver-bolsa="{{ 'producto.ver_bolsa' | t }}"
+  data-txt-error="{{ 'producto.error' | t }}"
+>
+  <div class="pagina grid-12">
+    <div class="producto__galeria">
+      {% for media in product.media %}
+        <figure class="producto__imagen" data-media-id="{{ media.id }}">
+          {%- liquid
+            assign carga = 'lazy'
+            if forloop.first
+              assign carga = 'eager'
+            endif
+          -%}
+          {% case media.media_type %}
+            {% when 'image' %}
+              {{
+                media
+                | image_url: width: 1800
+                | image_tag:
+                  loading: carga,
+                  widths: '600, 900, 1200, 1800',
+                  sizes: '(min-width: 1024px) 66vw, 86vw',
+                  alt: media.alt | default: product.title
+              }}
+            {% when 'video' %}
+              {{ media | video_tag: controls: true, muted: true, playsinline: true, loop: true, image_size: '1200x' }}
+            {% when 'external_video' %}
+              {{ media | external_video_tag }}
+            {% else %}
+              {{ media | media_tag }}
+          {% endcase %}
+        </figure>
+      {% else %}
+        <figure class="producto__imagen" style="display: grid; place-items: center">
+          <span class="tarjeta__ph">{% render 'cruz' %}</span>
+        </figure>
+      {% endfor %}
+    </div>
+
+    <div class="producto__info">
+      <div class="producto__sticky">
+        <div class="producto__codigos">
+          <span class="tag">{{ codigo }}</span>
+          {% if edicion != blank %}
+            <span class="tag tag--suave">{{ 'producto.edicion' | t }} {{ edicion }}</span>
+          {% endif %}
+          {% if product.available == false %}
+            <span class="tag tag--invertido">{{ 'producto.agotado' | t }}</span>
+          {% elsif tags_lower contains 'drop' %}
+            <span class="tag tag--naranja"><span class="tag__punto"></span>{{ 'producto.drop' | t }}</span>
+          {% endif %}
+        </div>
+
+        <h1 class="titulo producto__titulo">{{ product.title | escape }}</h1>
+
+        <p class="producto__precio">
+          <span data-precio>{{ variante.price | money }}</span>
+          <s data-precio-compara {% unless variante.compare_at_price > variante.price %}hidden{% endunless %}>
+            {{- variante.compare_at_price | money -}}
+          </s>
+        </p>
+
+        {% if edicion != blank %}
+          <p class="etiqueta suave">{{ 'producto.edicion_limitada' | t: count: edicion }}</p>
+        {% endif %}
+
+        {%- form 'product', product, data-form-producto: '', class: 'compra', novalidate: 'novalidate' -%}
+          <input type="hidden" name="id" value="{{ variante.id }}">
+
+          {% unless product.has_only_default_variant %}
+            {% for option in product.options_with_values %}
+              <fieldset class="opciones" data-opcion>
+                <legend class="etiqueta suave">
+                  <span>{{ option.name | escape }}</span>
+                  <span data-opcion-valor>{{ option.selected_value | escape }}</span>
+                </legend>
+                <div class="opciones__lista">
+                  {% for value in option.values %}
+                    <label class="opcion">
+                      <input
+                        type="radio"
+                        name="opcion-{{ section.id }}-{{ forloop.parentloop.index }}"
+                        value="{{ value | escape }}"
+                        {% if option.selected_value == value %}
+                          checked
+                        {% endif %}
+                      >
+                      <span>{{ value | escape }}</span>
+                    </label>
+                  {% endfor %}
+                </div>
+              </fieldset>
+            {% endfor %}
+          {% endunless %}
+
+          {% if section.settings.mostrar_cantidad %}
+            <div class="campo">
+              <label class="campo__label" for="cantidad-{{ section.id }}">{{ 'producto.cantidad' | t }}</label>
+              <div class="cantidad">
+                <button type="button" data-paso="-1" aria-label="{{ 'producto.disminuir' | t }}">−</button>
+                <input id="cantidad-{{ section.id }}" type="number" name="quantity" min="1" value="1" inputmode="numeric">
+                <button type="button" data-paso="1" aria-label="{{ 'producto.aumentar' | t }}">+</button>
+              </div>
+            </div>
+          {% endif %}
+
+          <button
+            type="submit"
+            name="add"
+            class="boton boton--primario boton--bloque"
+            data-boton-compra
+            {% unless variante.available %}
+              disabled
+            {% endunless %}
+          >
+            <span>
+              {%- if variante.available -%}
+                {{- 'producto.anadir' | t -}}
+              {%- else -%}
+                {{- 'producto.agotado' | t -}}
+              {%- endif -%}
+            </span>
+          </button>
+
+          {% if section.settings.mostrar_pago_dinamico %}
+            {{ form | payment_button }}
+          {% endif %}
+
+          <p class="compra__estado etiqueta" data-estado role="status" aria-live="polite"></p>
+        {%- endform -%}
+
+        <div class="ficha">
+          <h2 class="ficha__titulo etiqueta">{{ 'producto.ficha' | t }}</h2>
+          <dl class="ficha__dl">
+            <dt>{{ 'producto.codigo' | t }}</dt>
+            <dd>{{ codigo }}</dd>
+            {% if edicion != blank %}
+              <dt>{{ 'producto.edicion' | t }}</dt>
+              <dd>{{ edicion }} PZ</dd>
+            {% endif %}
+            {% if ficha != blank %}
+              {% assign lineas = ficha | newline_to_br | split: '<br />' %}
+              {% for linea in lineas %}
+                {% assign linea_limpia = linea | strip %}
+                {% if linea_limpia contains ':' %}
+                  {% assign partes = linea_limpia | split: ':' %}
+                  <dt>{{ partes.first | strip | escape }}</dt>
+                  <dd>{{ linea_limpia | remove_first: partes.first | remove_first: ':' | strip | escape }}</dd>
+                {% elsif linea_limpia != blank %}
+                  <dt>—</dt>
+                  <dd>{{ linea_limpia | escape }}</dd>
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+            <dt>{{ 'producto.sku' | t }}</dt>
+            <dd data-sku>{{ variante.sku | default: '—' }}</dd>
+          </dl>
+        </div>
+
+        {% if product.description != blank %}
+          <details class="desplegable" open>
+            <summary class="etiqueta">{{ 'producto.descripcion' | t }}</summary>
+            <div class="desplegable__cuerpo rte cuerpo-s">{{ product.description }}</div>
+          </details>
+        {% endif %}
+
+        {% for block in section.blocks %}
+          <details class="desplegable" {{ block.shopify_attributes }}>
+            <summary class="etiqueta">{{ block.settings.titulo | escape }}</summary>
+            <div class="desplegable__cuerpo rte cuerpo-s">
+              {{ block.settings.contenido }}
+              {% if block.settings.pagina != blank %}
+                {{ block.settings.pagina.content }}
+              {% endif %}
+            </div>
+          </details>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <script type="application/json" data-variantes>
+    [
+      {%- for v in product.variants -%}
+        {
+          "id": {{ v.id }},
+          "available": {{ v.available | json }},
+          "price": {{ v.price | json }},
+          "compare_at_price": {{ v.compare_at_price | default: 0 | json }},
+          "sku": {{ v.sku | json }},
+          "options": {{ v.options | json }},
+          "featured_media": {% if v.featured_media %}{ "id": {{ v.featured_media.id }} }{% else %}null{% endif %}
+        }{% unless forloop.last %},{% endunless %}
+      {%- endfor -%}
+    ]
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Producto",
+  "settings": [
+    { "type": "checkbox", "id": "mostrar_cantidad", "label": "Selector de cantidad", "default": false },
+    { "type": "checkbox", "id": "mostrar_pago_dinamico", "label": "Botón de pago dinámico (Shop Pay, etc.)", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "desplegable",
+      "name": "Desplegable",
+      "settings": [
+        { "type": "text", "id": "titulo", "label": "Título", "default": "Envíos y cambios" },
+        { "type": "richtext", "id": "contenido", "label": "Contenido", "default": "<p>Envíos en 2–5 días hábiles. Cambios dentro de 14 días, sin uso y con hang tag.</p>" },
+        { "type": "page", "id": "pagina", "label": "Contenido desde una página" }
+      ]
+    }
+  ]
+}
+{% endschema %}

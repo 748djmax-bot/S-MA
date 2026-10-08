@@ -1,0 +1,72 @@
+{% comment %}
+  Artículo: título en 4/12, cuerpo en 7/12, créditos y comentarios.
+{% endcomment %}
+
+<article class="pagina texto-pagina">
+  <div class="grid-12">
+    <header class="texto-pagina__titulo" style="display: grid; gap: var(--space-4); align-content: start">
+      <p class="codigo suave">{{ article.published_at | date: '%Y.%m.%d' }}</p>
+      <h1 class="display-l">{{ article.title | escape }}</h1>
+      <p class="etiqueta suave">{{ article.author }}</p>
+      <a class="boton boton--fantasma" href="{{ blog.url }}" style="justify-self: start">← {{ 'blog.volver' | t }}</a>
+    </header>
+
+    <div class="texto-pagina__cuerpo">
+      {% if article.image %}
+        <figure style="margin-bottom: var(--space-8)">
+          {{ article.image | image_url: width: 1800 | image_tag: loading: 'eager', widths: '600, 1200, 1800', sizes: '(min-width: 1024px) 58vw, 100vw', alt: article.image.alt }}
+        </figure>
+      {% endif %}
+
+      <div class="rte cuerpo">{{ article.content }}</div>
+
+      {% if blog.comments_enabled? %}
+        <section class="comentarios">
+          <h2 class="etiqueta suave">{{ 'blog.comentarios' | t }} [{{ article.comments_count }}]</h2>
+
+          {% paginate article.comments by 20 %}
+            {% for comment in article.comments %}
+              <div class="comentario">
+                <p class="etiqueta suave">{{ comment.author }} — {{ comment.created_at | date: '%Y.%m.%d' }}</p>
+                <div class="cuerpo-s rte">{{ comment.content }}</div>
+              </div>
+            {% endfor %}
+            {% render 'paginacion', paginate: paginate %}
+          {% endpaginate %}
+
+          {% form 'new_comment', article %}
+            {% if form.posted_successfully? %}
+              <p class="etiqueta acento" role="status">
+                {% if blog.moderated? %}{{ 'blog.moderado' | t }}{% else %}{{ 'blog.publicado' | t }}{% endif %}
+              </p>
+            {% elsif form.errors %}
+              <div class="mensaje-error" role="alert">Error — {{ form.errors | default_errors }}</div>
+            {% endif %}
+
+            <div style="display: grid; gap: var(--space-4)">
+              <div class="campo">
+                <label class="campo__label" for="comentario-nombre">{{ 'blog.nombre' | t }}</label>
+                <input class="campo__input" id="comentario-nombre" type="text" name="comment[author]" value="{{ form.author }}" required>
+              </div>
+              <div class="campo">
+                <label class="campo__label" for="comentario-email">{{ 'blog.email' | t }}</label>
+                <input class="campo__input" id="comentario-email" type="email" name="comment[email]" value="{{ form.email }}" required>
+              </div>
+              <div class="campo">
+                <label class="campo__label" for="comentario-mensaje">{{ 'blog.mensaje' | t }}</label>
+                <textarea class="campo__input" id="comentario-mensaje" name="comment[body]" required>{{ form.body }}</textarea>
+              </div>
+              <div><button type="submit" class="boton boton--primario">{{ 'blog.enviar' | t }}</button></div>
+            </div>
+          {% endform %}
+        </section>
+      {% endif %}
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Artículo"
+}
+{% endschema %}

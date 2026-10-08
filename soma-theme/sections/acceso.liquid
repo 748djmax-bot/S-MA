@@ -1,0 +1,57 @@
+{% comment %}
+  Acceso anticipado (newsletter). Pertenencia, no descuento: sin pop-ups ni «% OFF».
+{% endcomment %}
+
+<section class="seccion seccion--hairline">
+  <div class="pagina acceso">
+    <div class="acceso__texto">
+      <p class="etiqueta suave">{{ section.settings.etiqueta | escape }}</p>
+      <h2 class="display-l" style="margin-top: var(--space-4)">{{ section.settings.titulo | escape }}</h2>
+    </div>
+
+    <div class="acceso__campos">
+      <p class="cuerpo" style="margin-bottom: var(--space-4)">{{ section.settings.texto | escape }}</p>
+
+      {% form 'customer', id: 'acceso-form' %}
+        <input type="hidden" name="contact[tags]" value="newsletter, acceso-anticipado">
+        {% if form.posted_successfully? %}
+          <p class="etiqueta acento" role="status">{{ 'acceso.gracias' | t }}</p>
+        {% else %}
+          <div class="acceso__form">
+            <label class="sr-only" for="acceso-email">{{ 'acceso.email' | t }}</label>
+            <input
+              class="campo__input"
+              id="acceso-email"
+              type="email"
+              name="contact[email]"
+              autocomplete="email"
+              placeholder="{{ 'acceso.email' | t }}"
+              required
+              {% if form.errors %}
+                aria-invalid="true" aria-describedby="acceso-error"
+              {% endif %}
+            >
+            <button type="submit" class="boton boton--primario">{{ 'acceso.enviar' | t }}</button>
+          </div>
+          {% if form.errors %}
+            <div class="mensaje-error" id="acceso-error" style="margin-top: var(--space-2)">
+              Error — {{ form.errors | default_errors }}
+            </div>
+          {% endif %}
+        {% endif %}
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Acceso anticipado",
+  "settings": [
+    { "type": "text", "id": "etiqueta", "label": "Etiqueta", "default": "ACCESO" },
+    { "type": "text", "id": "titulo", "label": "Título", "default": "BECOME THE SIGNAL." },
+    { "type": "text", "id": "texto", "label": "Texto", "default": "Acceso anticipado para quienes ya estaban." }
+  ],
+  "presets": [{ "name": "Acceso anticipado" }]
+}
+{% endschema %}

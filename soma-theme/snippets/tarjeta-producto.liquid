@@ -1,0 +1,90 @@
+{% doc %}
+  Tarjeta de producto SØMA: imagen 4:5 (escala de grises en listados), código + edición,
+  nombre en mayúsculas y precio en mono. Estado: drop (tag naranja) o agotado (opacidad 0.5).
+
+  Metacampos opcionales del producto:
+  - soma.codigo  (texto, p. ej. «SØ/001»)
+  - soma.edicion (número, total de piezas de la edición, p. ej. 150)
+
+  Etiquetas del producto: «drop» marca la pieza con el tag naranja; «core» con tag CORE.
+
+  @param {product} product - Producto a mostrar
+  @param {number} [indice] - Posición en la lista, para cargar las primeras imágenes con prioridad
+{% enddoc %}
+
+{%- liquid
+  assign codigo = product.metafields.soma.codigo.value | default: settings.codigo_coleccion
+  assign edicion = product.metafields.soma.edicion.value
+  assign tags_lower = product.tags | join: ',' | downcase | split: ','
+
+  assign clases = 'tarjeta'
+  if settings.imagenes_mono
+    assign clases = clases | append: ' tarjeta--mono'
+  endif
+  unless product.available
+    assign clases = clases | append: ' tarjeta--agotado'
+  endunless
+
+  assign loading = 'lazy'
+  if indice and indice <= 4
+    assign loading = 'eager'
+  endif
+-%}
+
+<article class="{{ clases }}">
+  <div class="tarjeta__media">
+    {% if product.available == false %}
+      <span class="tarjeta__badge tag tag--invertido">{{ 'producto.agotado' | t }}</span>
+    {% elsif tags_lower contains 'drop' %}
+      <span class="tarjeta__badge tag tag--naranja"><span class="tag__punto"></span>{{ 'producto.drop' | t }}</span>
+    {% elsif tags_lower contains 'core' %}
+      <span class="tarjeta__badge tag">{{ 'producto.core' | t }}</span>
+    {% endif %}
+
+    {% if product.featured_media %}
+      {{
+        product.featured_media
+        | image_url: width: 900
+        | image_tag:
+          loading: loading,
+          widths: '300, 450, 600, 900',
+          sizes: '(min-width: 1024px) 25vw, 50vw',
+          alt: product.featured_media.alt | default: product.title
+      }}
+      {% if product.media.size > 1 %}
+        {{
+          product.media[1]
+          | image_url: width: 900
+          | image_tag: loading: 'lazy', widths: '300, 450, 600, 900', sizes: '(min-width: 1024px) 25vw, 50vw', alt: ''
+        }}
+      {% endif %}
+    {% else %}
+      <span class="tarjeta__ph">{% render 'cruz' %}</span>
+    {% endif %}
+  </div>
+
+  <div class="tarjeta__meta etiqueta">
+    <span>{{ codigo }}</span>
+    {% if edicion != blank %}
+      <span>{{ 'producto.edicion' | t }} {{ edicion }}</span>
+    {% endif %}
+  </div>
+
+  <h3 class="tarjeta__nombre nombre-producto">
+    <a href="{{ product.url }}">{{ product.title | escape }}</a>
+  </h3>
+
+  <p class="tarjeta__precio">
+    {% if product.compare_at_price > product.price %}
+      <span class="sr-only">{{ 'producto.precio_oferta' | t }}</span>
+      <span>{{ product.price | money }}</span>
+      <span class="sr-only">{{ 'producto.precio_regular' | t }}</span>
+      <s>{{ product.compare_at_price | money }}</s>
+    {% elsif product.price_varies %}
+      {%- assign precio_min = product.price_min | money -%}
+      {{ 'producto.precio_desde' | t: price: precio_min }}
+    {% else %}
+      {{ product.price | money }}
+    {% endif %}
+  </p>
+</article>

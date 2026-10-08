@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+  <head>
+    {% render 'meta-tags' %}
+    {% render 'css-variables' %}
+
+    <link rel="icon" type="image/svg+xml" href="{{ 'soma-cruz-blanco.svg' | asset_url }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Unbounded:wght@600;700;800&family=Grenze+Gotisch:wght@600;700&display=swap"
+    >
+
+    {{ 'soma.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'soma.js' | asset_url }}" defer></script>
+
+    {{ content_for_header }}
+  </head>
+
+  <body class="plantilla-{{ request.page_type | handle }}">
+    <a class="saltar" href="#contenido">{{ 'general.saltar' | t }}</a>
+
+    {% sections 'header-group' %}
+
+    <main id="contenido" tabindex="-1">
+      {{ content_for_layout }}
+    </main>
+
+    {% sections 'footer-group' %}
+  </body>
+</html>

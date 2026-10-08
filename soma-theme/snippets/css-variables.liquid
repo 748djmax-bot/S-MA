@@ -1,0 +1,110 @@
+{% doc %}
+  Tokens del design system SØMA (v4) como variables CSS.
+  Tema «Noche» por defecto; «Galería» se activa desde la configuración del tema
+  o por sección con la clase `.tema-galeria`.
+{% enddoc %}
+{% style %}
+  :root {
+    /* Color — primitivos */
+    --negro: #0b0b0b;
+    --carbon: #1c1c1c;
+    --concreto: #8c8a85;
+    --metal: #a7abae;
+    --ceniza: #c9c7c2;
+    --blanco-frio: #f2f4f5;
+    --naranja-1655: #ff5f00;
+    --sobre-naranja: var(--negro);
+
+    /* Tipografía */
+    --font-display: "Unbounded", "Archivo Black", "Arial Black", sans-serif;
+    --font-sans: "Archivo", "Helvetica Neue", Helvetica, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+    --font-gotica: "Grenze Gotisch", "UnifrakturCook", serif;
+
+    /* Espaciado */
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-6: 24px;
+    --space-8: 32px;
+    --space-12: 48px;
+    --space-16: 64px;
+    --space-24: 96px;
+    --space-40: 160px;
+
+    /* Forma */
+    --radius-0: 0;
+    --radius-full: 9999px;
+    --borde-hairline: 1px;
+    --borde-control: 1px;
+    --borde-enfasis: 2px;
+
+    /* Grid */
+    --grid-columnas: 12;
+    --grid-gutter: var(--space-4);
+    --grid-margen: var(--space-6);
+    --grid-max: 1600px;
+    --angulo-corte: 60deg;
+
+    /* Opacidad */
+    --opacidad-agotado: 0.5;
+    --opacidad-grano: 0.06;
+
+    /* Motion */
+    --dur-corte: 120ms;
+    --dur-transicion: 240ms;
+    --dur-revelado: 600ms;
+    --ease-mecanico: cubic-bezier(.2, 0, 0, 1);
+    --ease-lineal: linear;
+  }
+
+  @media (min-width: 1024px) {
+    :root {
+      --grid-gutter: var(--space-6);
+      --grid-margen: var(--space-12);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --dur-corte: 0ms;
+      --dur-transicion: 0ms;
+      --dur-revelado: 0ms;
+    }
+  }
+
+  :root,
+  .tema-noche {
+    --fondo: var(--negro);
+    --superficie: #151515;
+    --superficie-alta: #1f1f1f;
+    --linea: #2e2e2e;
+    --linea-fuerte: #6b6965;
+    --tinta: var(--blanco-frio);
+    --tinta-suave: #a3a19c;
+    --accion: var(--blanco-frio);
+    --sobre-accion: var(--negro);
+    --acento: var(--naranja-1655);
+    --error: #ff7a66;
+    --foco: var(--naranja-1655);
+    color-scheme: dark;
+  }
+
+  {% if settings.tema == 'galeria' %}:root,{% endif %}
+  .tema-galeria {
+    --fondo: #e4e3df;
+    --superficie: #efeeea;
+    --superficie-alta: #f8f8f6;
+    --linea: #c4c2bd;
+    --linea-fuerte: #77756f;
+    --tinta: var(--negro);
+    --tinta-suave: #4a4844;
+    --accion: var(--negro);
+    --sobre-accion: var(--blanco-frio);
+    --acento: #a63c00;
+    --error: #a3260f;
+    --foco: #a63c00;
+    color-scheme: light;
+  }
+{% endstyle %}

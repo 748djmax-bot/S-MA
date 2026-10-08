@@ -1,0 +1,66 @@
+{% comment %}
+  Manifiesto: claim enorme a la izquierda (7/12), texto en 4/12 a la derecha,
+  línea de énfasis de 2px arriba y datos técnicos como ornamento.
+{% endcomment %}
+
+<section class="seccion">
+  <div class="pagina">
+    <div class="manifiesto grid-12">
+      {% if section.settings.etiqueta != blank %}
+        <p class="etiqueta suave" style="grid-column: 1 / -1">{{ section.settings.etiqueta | escape }}</p>
+      {% endif %}
+
+      <h2 class="display-xl manifiesto__claim revelado">{{ section.settings.claim | escape }}</h2>
+
+      <div class="manifiesto__texto">
+        {% if section.settings.nombre != blank %}
+          <p class="gotica-l">{{ section.settings.nombre | escape }}</p>
+        {% endif %}
+        <div class="cuerpo rte">{{ section.settings.texto }}</div>
+      </div>
+
+      {% if section.blocks.size > 0 %}
+        <ul class="manifiesto__datos micro suave" role="list" style="list-style: none; padding: 0">
+          {% for block in section.blocks %}
+            <li {{ block.shopify_attributes }}>{{ block.settings.dato | escape }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Manifiesto",
+  "settings": [
+    { "type": "text", "id": "etiqueta", "label": "Etiqueta", "default": "01 — MANIFIESTO" },
+    { "type": "text", "id": "claim", "label": "Claim", "default": "CULTURE OVER TRENDS." },
+    { "type": "text", "id": "nombre", "label": "Nombre propio en gótica", "info": "Una sola vez por página. Mayúscula inicial, nunca todo en mayúsculas.", "default": "Concreto" },
+    {
+      "type": "richtext",
+      "id": "texto",
+      "label": "Texto",
+      "default": "<p>SØMA viste a quienes habitan la ciudad de noche: el club, la galería, el estacionamiento vacío. Ediciones cortas y numeradas, sin reposición. Cada prenda es un objeto; cada objeto, una señal.</p>"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "dato",
+      "name": "Dato técnico",
+      "settings": [{ "type": "text", "id": "dato", "label": "Dato", "default": "RIPSTOP 210D · 380 GSM" }]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Manifiesto",
+      "blocks": [
+        { "type": "dato", "settings": { "dato": "SØ/001" } },
+        { "type": "dato", "settings": { "dato": "150 piezas. Sin reposición." } },
+        { "type": "dato", "settings": { "dato": "N 00°00′ W 00°00′" } },
+        { "type": "dato", "settings": { "dato": "128 BPM" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

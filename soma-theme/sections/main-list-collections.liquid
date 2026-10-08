@@ -1,0 +1,29 @@
+{% comment %}
+  Archivo de colecciones: índice numerado en `display-l` con número de piezas.
+{% endcomment %}
+
+<section class="pagina coleccion__cabecera">
+  <p class="etiqueta suave">{{ 'colecciones.titulo' | t }}</p>
+  <h1 class="display-l" style="margin: var(--space-4) 0 var(--space-12)">{{ section.settings.titulo | escape }}</h1>
+
+  <ol class="indice-colecciones" role="list">
+    {% for collection in collections %}
+      <li>
+        <a href="{{ collection.url }}">
+          <span class="etiqueta suave">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <span class="display-l">{{ collection.title | escape }}</span>
+          <span class="etiqueta suave">{{ 'coleccion.piezas' | t: count: collection.products_count }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+</section>
+
+<div style="height: var(--space-16)"></div>
+
+{% schema %}
+{
+  "name": "Lista de colecciones",
+  "settings": [{ "type": "text", "id": "titulo", "label": "Título", "default": "ARCHIVO" }]
+}
+{% endschema %}

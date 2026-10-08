@@ -1,0 +1,119 @@
+{% comment %}
+  Hero SØMA (plantilla A): foto o video de campaña a pantalla completa en Noche,
+  claim `display-xl` abajo-izquierda, código de colección y coordenadas en las esquinas,
+  la barra del corte a 60° como única señal naranja.
+{% endcomment %}
+
+{%- liquid
+  assign codigo = section.settings.codigo | default: settings.codigo_coleccion
+  assign coordenadas = section.settings.coordenadas | default: settings.coordenadas
+  assign bpm = section.settings.bpm | default: settings.bpm
+  assign tiene_media = false
+  if section.settings.video != blank or section.settings.imagen != blank
+    assign tiene_media = true
+  endif
+-%}
+
+<section
+  class="hero{% if settings.grano and tiene_media %} grano{% endif %}"
+  style="--hero-sombra: {{ section.settings.sombra | divided_by: 100.0 }}; --hero-gris: {% if section.settings.gris %}1{% else %}0{% endif %};"
+  aria-label="{{ section.settings.claim | escape }}"
+>
+  {% if section.settings.video != blank %}
+    <div class="hero__media">
+      {{
+        section.settings.video
+        | video_tag:
+          autoplay: true,
+          loop: true,
+          muted: true,
+          playsinline: true,
+          controls: false,
+          image_size: '1920x'
+      }}
+    </div>
+  {% elsif section.settings.imagen != blank %}
+    <div class="hero__media">
+      {{
+        section.settings.imagen
+        | image_url: width: 2400
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          widths: '750, 1100, 1500, 1920, 2400',
+          sizes: '100vw',
+          alt: section.settings.imagen.alt
+      }}
+    </div>
+  {% endif %}
+
+  {% if section.settings.mostrar_corte %}
+    <span class="corte" aria-hidden="true"></span>
+  {% endif %}
+
+  <div class="hero__interior registro">
+    <div class="hero__esquinas micro">
+      <div>
+        <span>{{ codigo }}</span>
+        {% if section.settings.edicion != blank %}<span>{{ section.settings.edicion }}</span>{% endif %}
+      </div>
+      <div>
+        <span>{{ coordenadas }}</span>
+        <span>{{ bpm }}</span>
+      </div>
+    </div>
+
+    {% if section.settings.mostrar_logo %}
+      <div class="hero__logo revelado">
+        <img
+          src="{{ 'soma-logo-desvanecido-blanco.svg' | asset_url }}"
+          alt="{{ shop.name | escape }}"
+          width="584"
+          height="250"
+        >
+      </div>
+    {% else %}
+      <div></div>
+    {% endif %}
+
+    <div class="hero__pie">
+      {% if section.settings.claim != blank %}
+        <h1 class="display-xl hero__claim revelado">{{ section.settings.claim | escape }}</h1>
+      {% endif %}
+      {% if section.settings.bajada != blank %}
+        <p class="subtitulo hero__bajada">{{ section.settings.bajada | escape }}</p>
+      {% endif %}
+      {% if section.settings.boton_texto != blank %}
+        <a class="boton boton--primario" href="{{ section.settings.boton_url | default: routes.all_products_collection_url }}">
+          {{- section.settings.boton_texto | escape -}}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero de campaña",
+  "tag": "div",
+  "settings": [
+    { "type": "image_picker", "id": "imagen", "label": "Foto de campaña", "info": "Luz dura, de noche, arquitectura real." },
+    { "type": "video", "id": "video", "label": "Video de campaña", "info": "Tiene prioridad sobre la foto. Cortes duros a BPM." },
+    { "type": "checkbox", "id": "gris", "label": "Imagen en escala de grises", "default": false },
+    { "type": "range", "id": "sombra", "label": "Sombra inferior", "min": 0, "max": 90, "step": 5, "unit": "%", "default": 55 },
+    { "type": "checkbox", "id": "mostrar_logo", "label": "Mostrar logo desvanecido", "info": "Firma principal; solo se usa a 200 px o más.", "default": true },
+    { "type": "checkbox", "id": "mostrar_corte", "label": "Mostrar el corte naranja a 60°", "default": true },
+    { "type": "header", "content": "Texto" },
+    { "type": "text", "id": "claim", "label": "Claim", "info": "Inglés, MAYÚSCULAS, 2–4 palabras, con punto final.", "default": "NOT MADE TO FIT." },
+    { "type": "text", "id": "bajada", "label": "Bajada", "default": "Ropa para habitar la ciudad de noche." },
+    { "type": "text", "id": "boton_texto", "label": "Texto del botón", "default": "Ver colección" },
+    { "type": "url", "id": "boton_url", "label": "Enlace del botón" },
+    { "type": "header", "content": "Datos en esquinas" },
+    { "type": "text", "id": "codigo", "label": "Código de colección", "info": "Vacío = el de la configuración del tema." },
+    { "type": "text", "id": "edicion", "label": "Edición", "default": "150 PIEZAS" },
+    { "type": "text", "id": "coordenadas", "label": "Coordenadas" },
+    { "type": "text", "id": "bpm", "label": "BPM" }
+  ],
+  "presets": [{ "name": "Hero de campaña" }]
+}
+{% endschema %}

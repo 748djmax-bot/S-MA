@@ -1,0 +1,92 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "claim": "NOT MADE TO FIT.",
+        "bajada": "Ropa para habitar la ciudad de noche.",
+        "boton_texto": "Ver colección",
+        "edicion": "150 PIEZAS",
+        "mostrar_logo": true,
+        "mostrar_corte": true,
+        "sombra": 55
+      }
+    },
+    "nuevo": {
+      "type": "coleccion-destacada",
+      "settings": { "titulo": "NEW", "limite": 8 }
+    },
+    "manifiesto": {
+      "type": "manifiesto",
+      "blocks": {
+        "d1": { "type": "dato", "settings": { "dato": "SØ/001" } },
+        "d2": { "type": "dato", "settings": { "dato": "150 piezas. Sin reposición." } },
+        "d3": { "type": "dato", "settings": { "dato": "N 00°00′ W 00°00′" } },
+        "d4": { "type": "dato", "settings": { "dato": "128 BPM" } }
+      },
+      "block_order": ["d1", "d2", "d3", "d4"],
+      "settings": {
+        "etiqueta": "01 — MANIFIESTO",
+        "claim": "CULTURE OVER TRENDS.",
+        "nombre": "Concreto"
+      }
+    },
+    "drop": {
+      "type": "drop",
+      "settings": {
+        "etiqueta": "DROP",
+        "en_vivo": true,
+        "codigo": "SØ/002",
+        "nombre": "SØ/002 — SODIO",
+        "texto": "150 piezas. Sin reposición.",
+        "fecha": "2026.11.14 — 22:00",
+        "boton_texto": "Ver drop"
+      }
+    },
+    "lookbook": {
+      "type": "imagen-texto",
+      "settings": {
+        "etiqueta": "02 — LOOKBOOK",
+        "titulo": "WORN AFTER DARK.",
+        "boton_texto": "Ver lookbook"
+      }
+    },
+    "signal": {
+      "type": "signal",
+      "blocks": {
+        "e1": {
+          "type": "evento",
+          "settings": {
+            "fecha": "2026.11.14",
+            "evento": "SIGNAL 04",
+            "lugar": "Techno industrial. Concreto. Hasta el amanecer.",
+            "coordenadas": "N 00°00′ W 00°00′",
+            "lineup": "[DJ] · [DJ] · [DJ]",
+            "en_vivo": true
+          }
+        },
+        "e2": {
+          "type": "evento",
+          "settings": {
+            "fecha": "2026.12.19",
+            "evento": "SIGNAL 05",
+            "lugar": "Exposición + DJ set. Nave industrial.",
+            "coordenadas": "N 00°00′ W 00°00′",
+            "lineup": "[ARTISTA] · [DJ]"
+          }
+        }
+      },
+      "block_order": ["e1", "e2"],
+      "settings": { "titulo": "SIGNAL", "subtitulo": "Eventos · DJ sets · Exposiciones" }
+    },
+    "acceso": {
+      "type": "acceso",
+      "settings": {
+        "etiqueta": "ACCESO",
+        "titulo": "BECOME THE SIGNAL.",
+        "texto": "Acceso anticipado para quienes ya estaban."
+      }
+    }
+  },
+  "order": ["hero", "nuevo", "manifiesto", "drop", "lookbook", "signal", "acceso"]
+}

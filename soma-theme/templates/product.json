@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "envios": {
+          "type": "desplegable",
+          "settings": {
+            "titulo": "Envíos y cambios",
+            "contenido": "<p>Envíos en 2–5 días hábiles. Cambios dentro de 14 días, sin uso y con hang tag.</p>"
+          }
+        }
+      },
+      "block_order": ["envios"],
+      "settings": {}
+    },
+    "relacionados": {
+      "type": "productos-relacionados",
+      "settings": {}
+    }
+  },
+  "order": ["main", "relacionados"]
+}

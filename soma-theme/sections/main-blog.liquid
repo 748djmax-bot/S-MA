@@ -1,0 +1,40 @@
+{% comment %}
+  Diario / blog: lista técnica de artículos con fecha en mono e imagen en escala de grises.
+{% endcomment %}
+
+<section class="pagina coleccion__cabecera">
+  <p class="etiqueta suave">{{ settings.codigo_coleccion }}</p>
+  <h1 class="display-l" style="margin: var(--space-4) 0 var(--space-12)">{{ blog.title | escape }}</h1>
+
+  {% paginate blog.articles by 12 %}
+    <ul class="articulos" role="list">
+      {% for article in blog.articles %}
+        <li>
+          <a href="{{ article.url }}">
+            <span class="codigo suave">{{ article.published_at | date: '%Y.%m.%d' }}</span>
+            <span style="display: grid; gap: var(--space-2)">
+              <span class="titulo">{{ article.title | escape }}</span>
+              {% if article.excerpt_or_content != blank %}
+                <span class="cuerpo-s suave">{{ article.excerpt_or_content | strip_html | truncatewords: 30 }}</span>
+              {% endif %}
+            </span>
+            {% if article.image %}
+              <span class="articulos__media">
+                {{ article.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '450, 900', sizes: '(min-width: 1024px) 30vw, 100vw', alt: article.image.alt }}
+              </span>
+            {% endif %}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+    {% render 'paginacion', paginate: paginate %}
+  {% endpaginate %}
+</section>
+
+<div style="height: var(--space-16)"></div>
+
+{% schema %}
+{
+  "name": "Blog"
+}
+{% endschema %}

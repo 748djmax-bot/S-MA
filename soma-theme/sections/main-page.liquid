@@ -1,0 +1,16 @@
+{% comment %}
+  Página de texto: título en 4/12, cuerpo en 7/12.
+{% endcomment %}
+
+<section class="pagina texto-pagina">
+  <div class="grid-12">
+    <h1 class="display-l texto-pagina__titulo">{{ page.title | escape }}</h1>
+    <div class="texto-pagina__cuerpo rte cuerpo">{{ page.content }}</div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Página"
+}
+{% endschema %}

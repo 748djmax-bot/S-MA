@@ -1,0 +1,27 @@
+{% doc %}
+  Paginación técnica: celdas cuadradas con hairline y números en mono.
+
+  @param {object} paginate - Objeto paginate del bloque {% paginate %}
+{% enddoc %}
+
+{% if paginate.pages > 1 %}
+  <nav class="pagina paginacion" aria-label="{{ 'general.pagina' | t: page: paginate.current_page }}">
+    {% if paginate.previous %}
+      <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.anterior' | t }}">←</a>
+    {% endif %}
+
+    {% for part in paginate.parts %}
+      {% if part.is_link %}
+        <a href="{{ part.url }}">{{ part.title }}</a>
+      {% elsif part.title == paginate.current_page %}
+        <span class="actual" aria-current="page">{{ part.title }}</span>
+      {% else %}
+        <span>{{ part.title }}</span>
+      {% endif %}
+    {% endfor %}
+
+    {% if paginate.next %}
+      <a href="{{ paginate.next.url }}" aria-label="{{ 'general.siguiente' | t }}">→</a>
+    {% endif %}
+  </nav>
+{% endif %}

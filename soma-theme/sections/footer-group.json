@@ -1,0 +1,21 @@
+{
+  "type": "footer",
+  "name": "Footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "info": {
+          "type": "menu",
+          "settings": { "titulo": "Info", "menu": "footer" }
+        }
+      },
+      "block_order": ["info"],
+      "settings": {
+        "frase": "Ropa para habitar la ciudad de noche.",
+        "mostrar_pagos": true
+      }
+    }
+  },
+  "order": ["footer"]
+}

@@ -1,0 +1,80 @@
+{% comment %}
+  SØMA SIGNAL: calendario de eventos como tabla técnica (fecha · lugar · coordenadas · line-up).
+{% endcomment %}
+
+<section class="seccion seccion--hairline">
+  <div class="pagina">
+    <div class="cabecera-seccion" style="border-bottom: 0">
+      <h2 class="titulo">{{ section.settings.titulo | escape }}</h2>
+      {% if section.settings.subtitulo != blank %}
+        <p class="etiqueta suave">{{ section.settings.subtitulo | escape }}</p>
+      {% endif %}
+    </div>
+
+    <table class="signal">
+      <thead class="etiqueta">
+        <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">Evento</th>
+          <th scope="col">Lugar</th>
+          <th scope="col">Coordenadas</th>
+          <th scope="col">Line-up</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for block in section.blocks %}
+          <tr {{ block.shopify_attributes }}>
+            <td class="codigo">{{ block.settings.fecha | escape }}</td>
+            <td>
+              {% if block.settings.url != blank %}
+                <a class="signal__evento" href="{{ block.settings.url }}">{{ block.settings.evento | escape }}</a>
+              {% else %}
+                <span class="signal__evento">{{ block.settings.evento | escape }}</span>
+              {% endif %}
+              {% if block.settings.en_vivo %}
+                <span class="signal__vivo tag tag--naranja"><span class="tag__punto"></span>En vivo</span>
+              {% endif %}
+            </td>
+            <td class="cuerpo-s">{{ block.settings.lugar | escape }}</td>
+            <td class="etiqueta suave">{{ block.settings.coordenadas | escape }}</td>
+            <td class="cuerpo-s suave">{{ block.settings.lineup | escape }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "SØMA Signal",
+  "settings": [
+    { "type": "text", "id": "titulo", "label": "Título", "default": "SIGNAL" },
+    { "type": "text", "id": "subtitulo", "label": "Subtítulo", "default": "Eventos · DJ sets · Exposiciones" }
+  ],
+  "blocks": [
+    {
+      "type": "evento",
+      "name": "Evento",
+      "settings": [
+        { "type": "text", "id": "fecha", "label": "Fecha", "default": "2026.11.14" },
+        { "type": "text", "id": "evento", "label": "Evento", "default": "SIGNAL 04" },
+        { "type": "text", "id": "lugar", "label": "Lugar", "default": "Techno industrial. Concreto. Hasta el amanecer." },
+        { "type": "text", "id": "coordenadas", "label": "Coordenadas", "default": "N 00°00′ W 00°00′" },
+        { "type": "text", "id": "lineup", "label": "Line-up", "default": "[DJ] · [DJ] · [DJ]" },
+        { "type": "url", "id": "url", "label": "Enlace" },
+        { "type": "checkbox", "id": "en_vivo", "label": "En vivo / próximo", "default": false }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "SØMA Signal",
+      "blocks": [
+        { "type": "evento", "settings": { "fecha": "2026.11.14", "evento": "SIGNAL 04", "en_vivo": true } },
+        { "type": "evento", "settings": { "fecha": "2026.12.19", "evento": "SIGNAL 05" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

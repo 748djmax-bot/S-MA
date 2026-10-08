@@ -1,0 +1,56 @@
+{% comment %}
+  Grid de producto SØMA: 4 columnas en escritorio, 2 en móvil, separadas por hairlines de 1px.
+{% endcomment %}
+
+{%- liquid
+  assign coleccion = section.settings.coleccion
+  assign limite = section.settings.limite
+-%}
+
+<section class="seccion{% if section.settings.hairline %} seccion--hairline{% endif %}">
+  <div class="pagina">
+    <div class="cabecera-seccion">
+      <h2 class="titulo">{{ section.settings.titulo | default: coleccion.title | escape }}</h2>
+      <div class="cabecera-seccion__datos etiqueta suave">
+        {% if coleccion != blank %}
+          <span>{{ 'coleccion.piezas' | t: count: coleccion.products_count }}</span>
+          <a href="{{ coleccion.url }}">{{ 'general.ver_todo' | t }}</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="pagina" style="padding-left: 0; padding-right: 0">
+    <ul class="grid-producto" role="list">
+      {% if coleccion != blank and coleccion.products.size > 0 %}
+        {% for product in coleccion.products limit: limite %}
+          <li>{% render 'tarjeta-producto', product: product, indice: forloop.index %}</li>
+        {% endfor %}
+      {% else %}
+        {% for i in (1..4) %}
+          <li>
+            <article class="tarjeta">
+              <div class="tarjeta__media"><span class="tarjeta__ph">{% render 'cruz' %}</span></div>
+              <div class="tarjeta__meta etiqueta"><span>{{ settings.codigo_coleccion }}</span><span>PZ 0{{ i }}/150</span></div>
+              <h3 class="tarjeta__nombre nombre-producto">Pieza {{ i }}</h3>
+              <p class="tarjeta__precio">—</p>
+            </article>
+          </li>
+        {% endfor %}
+      {% endif %}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Colección destacada",
+  "settings": [
+    { "type": "text", "id": "titulo", "label": "Título", "default": "NEW" },
+    { "type": "collection", "id": "coleccion", "label": "Colección" },
+    { "type": "range", "id": "limite", "label": "Piezas a mostrar", "min": 2, "max": 16, "step": 2, "default": 8 },
+    { "type": "checkbox", "id": "hairline", "label": "Hairline superior", "default": false }
+  ],
+  "presets": [{ "name": "Colección destacada" }]
+}
+{% endschema %}

@@ -1,0 +1,48 @@
+{% comment %}
+  Piezas relacionadas (recomendaciones de Shopify) en el grid de producto.
+{% endcomment %}
+
+{%- liquid
+  assign limite = section.settings.limite
+-%}
+
+<section class="seccion seccion--hairline">
+  <div class="pagina">
+    <div class="cabecera-seccion">
+      <h2 class="titulo">{{ section.settings.titulo | escape }}</h2>
+    </div>
+  </div>
+  <div class="pagina" style="padding-left: 0; padding-right: 0">
+    {% if recommendations.performed and recommendations.products_count > 0 %}
+      <ul class="grid-producto" role="list">
+        {% for product in recommendations.products limit: limite %}
+          <li>{% render 'tarjeta-producto', product: product %}</li>
+        {% endfor %}
+      </ul>
+    {% elsif section.settings.coleccion != blank %}
+      <ul class="grid-producto" role="list">
+        {% for product in section.settings.coleccion.products limit: limite %}
+          <li>{% render 'tarjeta-producto', product: product %}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      {%- comment -%} Carga diferida de recomendaciones {%- endcomment -%}
+      <div
+        data-recomendaciones
+        data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ limite }}"
+      ></div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Piezas relacionadas",
+  "settings": [
+    { "type": "text", "id": "titulo", "label": "Título", "default": "TAMBIÉN EN LA SEÑAL" },
+    { "type": "range", "id": "limite", "label": "Piezas", "min": 2, "max": 8, "step": 2, "default": 4 },
+    { "type": "collection", "id": "coleccion", "label": "Colección de respaldo" }
+  ],
+  "presets": [{ "name": "Piezas relacionadas" }]
+}
+{% endschema %}

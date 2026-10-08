@@ -1,0 +1,97 @@
+{% comment %}
+  Pie SØMA: cruz Ø, frase de marca, columnas de enlaces en hairline,
+  datos técnicos y métodos de pago en escala de grises.
+{% endcomment %}
+
+<footer class="footer" role="contentinfo">
+  <div class="pagina">
+    <div class="footer__cuadricula">
+      <div class="footer__marca">
+        {% render 'cruz' %}
+        {% if section.settings.frase != blank %}
+          <p class="subtitulo">{{ section.settings.frase | escape }}</p>
+        {% endif %}
+        <p class="micro suave">{{ settings.coordenadas }} — {{ settings.bpm }}</p>
+      </div>
+
+      {% for block in section.blocks %}
+        <div class="footer__col" {{ block.shopify_attributes }}>
+          {% if block.settings.titulo != blank %}
+            <h2 class="etiqueta suave">{{ block.settings.titulo | escape }}</h2>
+          {% endif %}
+          <ul role="list">
+            {% for link in block.settings.menu.links %}
+              <li>
+                <a href="{{ link.url }}" class="ui">{{ link.title | escape }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+
+      {% if settings.instagram != blank or settings.tiktok != blank or settings.soundcloud != blank %}
+        <div class="footer__col">
+          <h2 class="etiqueta suave">Signal</h2>
+          <ul role="list">
+            {% if settings.instagram != blank %}
+              <li><a class="ui" href="{{ settings.instagram }}" rel="noopener" target="_blank">Instagram</a></li>
+            {% endif %}
+            {% if settings.tiktok != blank %}
+              <li><a class="ui" href="{{ settings.tiktok }}" rel="noopener" target="_blank">TikTok</a></li>
+            {% endif %}
+            {% if settings.soundcloud != blank %}
+              <li><a class="ui" href="{{ settings.soundcloud }}" rel="noopener" target="_blank">SoundCloud</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="footer__base etiqueta">
+      <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }} — {{ 'footer.derechos' | t }}</span>
+
+      {% if section.settings.mostrar_pagos and shop.enabled_payment_types.size > 0 %}
+        <ul class="footer__pagos" role="list" aria-label="{{ 'footer.pagos' | t }}">
+          {% for type in shop.enabled_payment_types %}
+            <li>{{ type | payment_type_svg_tag }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      <span>{{ settings.codigo_coleccion }}</span>
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "enabled_on": { "groups": ["footer"] },
+  "max_blocks": 4,
+  "settings": [
+    {
+      "type": "text",
+      "id": "frase",
+      "label": "Frase de marca",
+      "default": "Ropa para habitar la ciudad de noche."
+    },
+    {
+      "type": "checkbox",
+      "id": "mostrar_pagos",
+      "label": "Mostrar métodos de pago",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Columna de enlaces",
+      "settings": [
+        { "type": "text", "id": "titulo", "label": "Título", "default": "Info" },
+        { "type": "link_list", "id": "menu", "label": "Menú", "default": "footer" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Footer" }]
+}
+{% endschema %}

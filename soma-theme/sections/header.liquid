@@ -1,0 +1,141 @@
+{% comment %}
+  Navegación SØMA: wordmark plano a la izquierda (nunca centrado), enlaces en `ui`,
+  búsqueda como fila completa con hairline, bolsa como [n] y menú índice a pantalla completa.
+{% endcomment %}
+
+<header class="header" role="banner">
+  <div class="pagina header__barra">
+    <a class="header__logo" href="{{ routes.root_url }}">
+      {% render 'logo-plano' %}
+    </a>
+
+    <nav class="header__nav" aria-label="{{ 'general.menu' | t }}">
+      <ul role="list">
+        {% for link in section.settings.menu.links %}
+          <li>
+            <a
+              href="{{ link.url }}"
+              {% if link.current %}
+                aria-current="page"
+              {% endif %}
+            >
+              {{- link.title | escape -}}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+
+    <div class="header__acciones">
+      <button
+        type="button"
+        class="header__accion"
+        data-abrir-busqueda
+        aria-expanded="false"
+        aria-controls="header-busqueda"
+      >
+        {{- 'general.buscar' | t -}}
+      </button>
+
+      {% if shop.customer_accounts_enabled %}
+        <a class="header__accion header__accion--escritorio" href="{{ routes.account_url }}">
+          {{- 'general.cuenta' | t -}}
+        </a>
+      {% endif %}
+
+      <a class="header__accion" href="{{ routes.cart_url }}">
+        {{- 'general.bolsa' | t }}
+        <span class="header__bolsa-cuenta" data-bolsa-cuenta>[{{ cart.item_count }}]</span>
+      </a>
+
+      <button
+        type="button"
+        class="header__accion"
+        data-abrir-menu
+        aria-expanded="false"
+        aria-controls="menu-indice"
+      >
+        {{- 'general.menu' | t -}}
+      </button>
+    </div>
+  </div>
+
+  <div class="header__busqueda" id="header-busqueda" hidden>
+    <form class="pagina busqueda-linea" action="{{ routes.search_url }}" method="get" role="search">
+      <label class="sr-only" for="header-busqueda-input">{{ 'general.buscar' | t }}</label>
+      <input
+        id="header-busqueda-input"
+        type="search"
+        name="q"
+        value="{{ search.terms | escape }}"
+        placeholder="{{ 'busqueda.placeholder' | t }}"
+        autocomplete="off"
+      >
+      <input type="hidden" name="options[prefix]" value="last">
+      <button type="submit" class="boton boton--fantasma">{{ 'busqueda.enviar' | t }}</button>
+    </form>
+  </div>
+</header>
+
+<div
+  class="menu-indice"
+  id="menu-indice"
+  role="dialog"
+  aria-modal="true"
+  aria-label="{{ 'general.menu' | t }}"
+  hidden
+>
+  <div class="pagina menu-indice__barra">
+    <a class="header__logo" href="{{ routes.root_url }}" style="color: var(--blanco-frio)">
+      {% render 'logo-plano' %}
+    </a>
+    <button type="button" class="header__accion" style="color: var(--blanco-frio)" data-cerrar-menu>
+      {{- 'general.cerrar' | t -}}
+    </button>
+  </div>
+
+  {%- liquid
+    assign menu_indice = section.settings.menu_indice
+    if menu_indice == blank
+      assign menu_indice = section.settings.menu
+    endif
+  -%}
+  <ol class="pagina menu-indice__lista" role="list">
+    {% for link in menu_indice.links %}
+      <li>
+        <a href="{{ link.url }}">
+          <span class="etiqueta menu-indice__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+          <span class="display-l">{{ link.title | escape }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ol>
+
+  <div class="pagina menu-indice__pie micro">
+    <span>{{ settings.codigo_coleccion }}</span>
+    <span>{{ settings.coordenadas }}</span>
+    <span>{{ settings.bpm }}</span>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "seccion-header",
+  "enabled_on": { "groups": ["header"] },
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "menu",
+      "label": "Menú de navegación",
+      "default": "main-menu"
+    },
+    {
+      "type": "link_list",
+      "id": "menu_indice",
+      "label": "Menú índice (pantalla completa)",
+      "info": "Categorías numeradas: 01 NEW · 02 OUTERWEAR · 03 PANTS… Si se deja vacío usa el menú de navegación."
+    }
+  ]
+}
+{% endschema %}

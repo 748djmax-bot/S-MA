@@ -1,0 +1,70 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "SØMA",
+    "theme_version": "1.0.0",
+    "theme_author": "SØMA",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://support.shopify.com/"
+  },
+  {
+    "name": "Tema",
+    "settings": [
+      {
+        "type": "select",
+        "id": "tema",
+        "label": "Tema de color",
+        "info": "Noche: web, social, eventos. Galería: lookbook, prensa y exposición.",
+        "options": [
+          { "value": "noche", "label": "Noche" },
+          { "value": "galeria", "label": "Galería" }
+        ],
+        "default": "noche"
+      },
+      {
+        "type": "checkbox",
+        "id": "imagenes_mono",
+        "label": "Imágenes de producto en escala de grises en listados",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "grano",
+        "label": "Capa de grano sobre fotografía",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Datos de marca",
+    "settings": [
+      {
+        "type": "text",
+        "id": "codigo_coleccion",
+        "label": "Código de colección activa",
+        "default": "SØ/001"
+      },
+      {
+        "type": "text",
+        "id": "coordenadas",
+        "label": "Coordenadas",
+        "info": "Lugar real del taller, shooting o evento.",
+        "default": "N 00°00′ W 00°00′"
+      },
+      {
+        "type": "text",
+        "id": "bpm",
+        "label": "Tempo de la colección (BPM)",
+        "default": "128 BPM"
+      }
+    ]
+  },
+  {
+    "name": "Redes",
+    "settings": [
+      { "type": "url", "id": "instagram", "label": "Instagram" },
+      { "type": "url", "id": "tiktok", "label": "TikTok" },
+      { "type": "url", "id": "soundcloud", "label": "SoundCloud" }
+    ]
+  }
+]

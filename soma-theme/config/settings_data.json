@@ -1,0 +1,13 @@
+{
+  "current": "Default",
+  "presets": {
+    "Default": {
+      "tema": "noche",
+      "imagenes_mono": true,
+      "grano": true,
+      "codigo_coleccion": "SØ/001",
+      "coordenadas": "N 00°00′ W 00°00′",
+      "bpm": "128 BPM"
+    }
+  }
+}

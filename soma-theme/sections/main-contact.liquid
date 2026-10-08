@@ -1,0 +1,51 @@
+{% comment %}
+  Página de contacto: texto de la página + formulario con campos SØMA.
+{% endcomment %}
+
+<section class="pagina texto-pagina">
+  <div class="grid-12">
+    <h1 class="display-l texto-pagina__titulo">{{ page.title | escape }}</h1>
+
+    <div class="texto-pagina__cuerpo">
+      {% if page.content != blank %}
+        <div class="rte cuerpo" style="margin-bottom: var(--space-8)">{{ page.content }}</div>
+      {% endif %}
+
+      {% form 'contact', id: 'contacto-form' %}
+        {% if form.posted_successfully? %}
+          <p class="etiqueta acento" role="status">{{ 'contacto.gracias' | t }}</p>
+        {% elsif form.errors %}
+          <div class="mensaje-error" role="alert">Error — {{ form.errors | default_errors }}</div>
+        {% endif %}
+
+        <div style="display: grid; gap: var(--space-6); max-width: 560px; margin-top: var(--space-4)">
+          <div class="campo">
+            <label class="campo__label" for="contacto-nombre">{{ 'contacto.nombre' | t }}</label>
+            <input class="campo__input" id="contacto-nombre" type="text" name="contact[name]" autocomplete="name" value="{{ form.name }}">
+          </div>
+          <div class="campo">
+            <label class="campo__label" for="contacto-email">{{ 'contacto.email' | t }}</label>
+            <input class="campo__input" id="contacto-email" type="email" name="contact[email]" autocomplete="email" required value="{{ form.email }}">
+          </div>
+          <div class="campo">
+            <label class="campo__label" for="contacto-telefono">{{ 'contacto.telefono' | t }}</label>
+            <input class="campo__input" id="contacto-telefono" type="tel" name="contact[phone]" autocomplete="tel" value="{{ form.phone }}">
+          </div>
+          <div class="campo">
+            <label class="campo__label" for="contacto-mensaje">{{ 'contacto.mensaje' | t }}</label>
+            <textarea class="campo__input" id="contacto-mensaje" name="contact[body]" required>{{ form.body }}</textarea>
+          </div>
+          <div>
+            <button type="submit" class="boton boton--primario">{{ 'contacto.enviar' | t }}</button>
+          </div>
+        </div>
+      {% endform %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contacto"
+}
+{% endschema %}
