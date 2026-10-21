@@ -1,58 +1,99 @@
 {
   "sections": {
+    "soma_hero": {
+      "type": "soma-hero",
+      "settings": {
+        "dato_izq": "SØ/001 — Concreto",
+        "dato_der": "128 BPM",
+        "claim": "Not made\nto fit.",
+        "detalle": "Serie corta · sin reposición",
+        "boton": "Ver la colección",
+        "enlace": "shopify://collections/soma-coleccion",
+        "grano": true,
+        "cursor": true
+      }
+    },
+    "soma_cinta": {
+      "type": "soma-cinta",
+      "blocks": {
+        "t1": { "type": "texto", "settings": { "texto": "SØ/001 — Concreto" } },
+        "t2": { "type": "texto", "settings": { "texto": "128 BPM" } },
+        "t3": { "type": "texto", "settings": { "texto": "Not made to fit." } },
+        "t4": { "type": "texto", "settings": { "texto": "Serie corta" } }
+      },
+      "block_order": ["t1", "t2", "t3", "t4"],
+      "settings": { "acento": false, "duracion": 30 }
+    },
     "hero": {
       "type": "hero",
+      "disabled": true,
       "settings": {
+        "gris": false,
+        "sombra": 55,
+        "mostrar_logo": true,
+        "mostrar_corte": true,
         "claim": "NOT MADE TO FIT.",
         "bajada": "Ropa para habitar la ciudad de noche.",
         "boton_texto": "Ver colección",
-        "edicion": "150 PIEZAS",
-        "mostrar_logo": true,
-        "mostrar_corte": true,
-        "sombra": 55
+        "boton_url": "",
+        "codigo": "",
+        "edicion": "SERIE CORTA",
+        "coordenadas": "",
+        "bpm": ""
       }
     },
     "nuevo": {
       "type": "coleccion-destacada",
-      "settings": { "titulo": "NEW", "limite": 8 }
+      "settings": { "titulo": "NEW", "coleccion": "soma-coleccion", "limite": 8, "hairline": false }
     },
     "manifiesto": {
       "type": "manifiesto",
       "blocks": {
         "d1": { "type": "dato", "settings": { "dato": "SØ/001" } },
-        "d2": { "type": "dato", "settings": { "dato": "150 piezas. Sin reposición." } },
-        "d3": { "type": "dato", "settings": { "dato": "N 00°00′ W 00°00′" } },
+        "d2": { "type": "dato", "settings": { "dato": "Serie corta. Sin reposición." } },
         "d4": { "type": "dato", "settings": { "dato": "128 BPM" } }
       },
-      "block_order": ["d1", "d2", "d3", "d4"],
+      "block_order": ["d1", "d2", "d4"],
       "settings": {
         "etiqueta": "01 — MANIFIESTO",
         "claim": "CULTURE OVER TRENDS.",
-        "nombre": "Concreto"
+        "nombre": "Concreto",
+        "texto": "<p>SØMA viste a quienes habitan la ciudad de noche: el club, la galería, el estacionamiento vacío. Series cortas, sin reposición. Cada prenda es un objeto; cada objeto, una señal.</p>"
       }
     },
     "drop": {
       "type": "drop",
       "settings": {
-        "etiqueta": "DROP",
-        "en_vivo": true,
+        "etiqueta": "PRÓXIMO DROP",
+        "en_vivo": false,
         "codigo": "SØ/002",
         "nombre": "SØ/002 — SODIO",
-        "texto": "150 piezas. Sin reposición.",
-        "fecha": "2026.11.14 — 22:00",
-        "boton_texto": "Ver drop"
+        "texto": "Próximamente. Serie corta, sin reposición.",
+        "fecha": "",
+        "coordenadas": "",
+        "bpm": "",
+        "coleccion": "",
+        "boton_texto": "",
+        "boton_url": ""
       }
     },
     "lookbook": {
       "type": "imagen-texto",
+      "disabled": true,
       "settings": {
+        "invertido": false,
+        "galeria": false,
         "etiqueta": "02 — LOOKBOOK",
         "titulo": "WORN AFTER DARK.",
-        "boton_texto": "Ver lookbook"
+        "texto": "<p>Fotografiado de noche, en arquitectura real. Luz de sodio. Concreto.</p>",
+        "credito": "",
+        "boton_texto": "",
+        "boton_url": ""
       }
     },
     "signal": {
       "type": "signal",
+      "disabled": true,
       "blocks": {
         "e1": {
           "type": "evento",
@@ -60,23 +101,14 @@
             "fecha": "2026.11.14",
             "evento": "SIGNAL 04",
             "lugar": "Techno industrial. Concreto. Hasta el amanecer.",
-            "coordenadas": "N 00°00′ W 00°00′",
-            "lineup": "[DJ] · [DJ] · [DJ]",
-            "en_vivo": true
-          }
-        },
-        "e2": {
-          "type": "evento",
-          "settings": {
-            "fecha": "2026.12.19",
-            "evento": "SIGNAL 05",
-            "lugar": "Exposición + DJ set. Nave industrial.",
-            "coordenadas": "N 00°00′ W 00°00′",
-            "lineup": "[ARTISTA] · [DJ]"
+            "coordenadas": "",
+            "lineup": "",
+            "url": "",
+            "en_vivo": false
           }
         }
       },
-      "block_order": ["e1", "e2"],
+      "block_order": ["e1"],
       "settings": { "titulo": "SIGNAL", "subtitulo": "Eventos · DJ sets · Exposiciones" }
     },
     "acceso": {
@@ -84,9 +116,9 @@
       "settings": {
         "etiqueta": "ACCESO",
         "titulo": "BECOME THE SIGNAL.",
-        "texto": "Acceso anticipado para quienes ya estaban."
+        "texto": "Acceso anticipado al próximo drop para quienes ya estaban."
       }
     }
   },
-  "order": ["hero", "nuevo", "manifiesto", "drop", "lookbook", "signal", "acceso"]
+  "order": ["soma_hero", "soma_cinta", "hero", "nuevo", "manifiesto", "drop", "lookbook", "signal", "acceso"]
 }

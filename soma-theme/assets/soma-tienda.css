@@ -1,0 +1,7 @@
+/* SØMA — grilla animada y ajustes de tienda */
+html:not(.soma-motion-on) .soma-rev{clip-path:none!important}
+.tarjeta__media{position:relative;overflow:hidden}
+.soma-pieza{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:10px 12px;background:var(--soma-naranja,#ff5f00);color:#0b0b0b;font-family:var(--soma-mono,'IBM Plex Mono',monospace);font-size:11px;line-height:16px;letter-spacing:.14em;text-transform:uppercase;font-weight:500;clip-path:polygon(0 0,0 0,-58% 100%,-58% 100%);transition:clip-path var(--soma-medio,234ms) var(--soma-e-corte,cubic-bezier(.7,0,.3,1));pointer-events:none}
+.tarjeta:hover .soma-pieza,.tarjeta:focus-within .soma-pieza{clip-path:polygon(0 0,158% 0,100% 100%,-58% 100%)}
+@media (hover:none){.soma-pieza{display:none}}
+@media (prefers-reduced-motion:reduce){.soma-pieza{transition:none}}

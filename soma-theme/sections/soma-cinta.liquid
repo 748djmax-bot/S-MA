@@ -1,0 +1,24 @@
+{{ 'soma-motion.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500&display=swap">
+{%- capture items -%}{%- for block in section.blocks -%}<span class="soma-cinta__item">{{ block.settings.texto }}<span class="soma-cinta__sep">·</span></span>{%- endfor -%}{%- endcapture -%}
+{%- capture hidden -%}{%- for block in section.blocks -%}<span class="soma-cinta__item" aria-hidden="true">{{ block.settings.texto }}<span class="soma-cinta__sep">·</span></span>{%- endfor -%}{%- endcapture -%}
+<div class="soma-cinta soma-mono{% if section.settings.acento %} soma-cinta--acento{% endif %}" role="marquee" aria-label="{% for block in section.blocks %}{{ block.settings.texto | escape }}{% unless forloop.last %}, {% endunless %}{% endfor %}">
+  <div class="soma-cinta__pista" style="animation-duration: {{ section.settings.duracion }}s">{{ items }}{{ hidden }}{{ hidden }}{{ hidden }}</div>
+</div>
+{% schema %}
+{
+  "name": "SØMA · Cinta técnica",
+  "class": "soma-cinta-section",
+  "settings": [
+    { "type": "checkbox", "id": "acento", "label": "Versión naranja (drops y eventos)", "default": false },
+    { "type": "range", "id": "duracion", "label": "Duración de una vuelta (segundos)", "min": 10, "max": 60, "step": 2, "default": 30 }
+  ],
+  "blocks": [{ "type": "texto", "name": "Texto", "settings": [{ "type": "text", "id": "texto", "label": "Texto", "default": "SØ/001 — Concreto" }] }],
+  "presets": [{ "name": "SØMA · Cinta técnica", "blocks": [
+    { "type": "texto", "settings": { "texto": "SØ/001 — Concreto" } },
+    { "type": "texto", "settings": { "texto": "128 BPM" } },
+    { "type": "texto", "settings": { "texto": "Not made to fit." } },
+    { "type": "texto", "settings": { "texto": "Serie corta" } }
+  ] }]
+}
+{% endschema %}

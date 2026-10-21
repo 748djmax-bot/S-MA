@@ -1,0 +1,35 @@
+{{ 'soma-motion.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'soma-motion.js' | asset_url }}" defer></script>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Archivo:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<section class="soma-hero{% if section.settings.cursor %} soma-cursor{% endif %}" aria-label="Portada SØMA">
+  {%- if section.settings.grano -%}<div class="soma-grano" aria-hidden="true"></div>{%- endif -%}
+  <div class="soma-hero__in">
+    <div class="soma-hero__top soma-mono"><span>{{ section.settings.dato_izq }}</span><span>{{ section.settings.dato_der }}</span></div>
+    <div class="soma-hero__logo">{%- if section.settings.logo != blank -%}<img class="soma-logo-desv soma-goteo" src="{{ section.settings.logo | image_url: width: 2400 }}" alt="SØMA" width="{{ section.settings.logo.width }}" height="{{ section.settings.logo.height }}" loading="eager">{%- else -%}<img class="soma-logo-desv soma-goteo" src="{{ 'soma-logo-desvanecido.svg' | asset_url }}" alt="SØMA" width="584" height="250" loading="eager">{%- endif -%}</div>
+    <div class="soma-hero__bot">
+      <p class="soma-hero__claim soma-rev" style="--soma-i:0">{{ section.settings.claim | newline_to_br }}</p>
+      <div class="soma-hero__cta soma-rev" style="--soma-i:1">
+        {%- if section.settings.detalle != blank -%}<span class="soma-mono">{{ section.settings.detalle }}</span>{%- endif -%}
+        {%- if section.settings.boton != blank -%}<a class="soma-btn" href="{{ section.settings.enlace | default: routes.all_products_collection_url }}">{{ section.settings.boton }}</a>{%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "SØMA · Hero animado",
+  "class": "soma-hero-section",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo (opcional, reemplaza el logo gótico)" },
+    { "type": "text", "id": "dato_izq", "label": "Dato superior izquierdo", "default": "SØ/001 — Concreto" },
+    { "type": "text", "id": "dato_der", "label": "Dato superior derecho", "default": "128 BPM" },
+    { "type": "textarea", "id": "claim", "label": "Claim", "default": "Not made\nto fit." },
+    { "type": "text", "id": "detalle", "label": "Texto sobre el botón", "default": "Serie corta · sin reposición" },
+    { "type": "text", "id": "boton", "label": "Texto del botón", "default": "Ver la colección" },
+    { "type": "url", "id": "enlace", "label": "Enlace del botón" },
+    { "type": "checkbox", "id": "grano", "label": "Grano animado", "default": true },
+    { "type": "checkbox", "id": "cursor", "label": "Cursor cruz Ø (escritorio)", "default": true }
+  ],
+  "presets": [{ "name": "SØMA · Hero animado" }]
+}
+{% endschema %}

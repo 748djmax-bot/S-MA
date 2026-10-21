@@ -3,6 +3,13 @@
     "main": {
       "type": "main-product",
       "blocks": {
+        "tallas": {
+          "type": "desplegable",
+          "settings": {
+            "titulo": "Guía de tallas",
+            "contenido": "<p>Todas las prendas tienen corte oversized: están pensadas para quedar amplias. Si prefieres un fit más ajustado, elige una talla menos de la que usas normalmente.</p><p>Las gorras son de talla única con cierre ajustable.</p>"
+          }
+        },
         "envios": {
           "type": "desplegable",
           "settings": {
@@ -11,12 +18,16 @@
           }
         }
       },
-      "block_order": ["envios"],
+      "block_order": ["tallas", "envios"],
       "settings": {}
     },
     "relacionados": {
       "type": "productos-relacionados",
-      "settings": {}
+      "settings": {
+        "titulo": "COMPLETA EL LOOK",
+        "limite": 4,
+        "coleccion": "soma-coleccion"
+      }
     }
   },
   "order": ["main", "relacionados"]

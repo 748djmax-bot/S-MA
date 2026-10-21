@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="{{ request.locale.iso_code }}">
   <head>
+    <script>document.documentElement.classList.add('soma-motion-on');</script>
     {% render 'meta-tags' %}
     {% render 'css-variables' %}
 
@@ -14,7 +15,10 @@
     >
 
     {{ 'soma.css' | asset_url | stylesheet_tag }}
+    {{ 'soma-motion.css' | asset_url | stylesheet_tag }}
+    {{ 'soma-tienda.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'soma.js' | asset_url }}" defer></script>
+    <script src="{{ 'soma-motion.js' | asset_url }}" defer></script>
 
     {{ content_for_header }}
   </head>

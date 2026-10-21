@@ -1,0 +1,43 @@
+/* SØMA — sistema de motion a 128 BPM (1 tiempo = 469 ms) */
+:root{--soma-negro:#0b0b0b;--soma-tinta:#f2f4f5;--soma-suave:#a3a19c;--soma-linea:#2e2e2e;--soma-naranja:#ff5f00;
+--soma-pulso:469ms;--soma-medio:234ms;--soma-cuarto:117ms;--soma-compas:1875ms;--soma-frase:30s;
+--soma-e-mec:cubic-bezier(.2,0,0,1);--soma-e-corte:cubic-bezier(.7,0,.3,1);--soma-e-salida:cubic-bezier(.4,0,1,1);
+--soma-display:"Unbounded","Arial Black",Arial,sans-serif;--soma-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;--soma-sans:"Archivo","Helvetica Neue",Arial,sans-serif}
+.soma-mono{font-family:var(--soma-mono);font-size:12px;line-height:16px;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+/* grano vivo */
+@keyframes soma-grano{0%{background-position:0 0}25%{background-position:-60px 30px}50%{background-position:40px -50px}75%{background-position:-25px 55px}100%{background-position:50px -15px}}
+.soma-grano{position:absolute;inset:0;pointer-events:none;opacity:.06;z-index:1;background-size:220px 220px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:soma-grano var(--soma-pulso) steps(4) infinite}
+/* goteo del logo */
+@keyframes soma-goteo{from{-webkit-mask-position:0 100%;mask-position:0 100%}to{-webkit-mask-position:0 0;mask-position:0 0}}
+.soma-goteo{-webkit-mask-image:linear-gradient(180deg,#000 0 55%,transparent 75%);mask-image:linear-gradient(180deg,#000 0 55%,transparent 75%);-webkit-mask-size:100% 300%;mask-size:100% 300%;-webkit-mask-position:0 100%;mask-position:0 100%;animation:soma-goteo var(--soma-compas) var(--soma-e-salida) .2s forwards}
+/* revelado en corte (60°) */
+@keyframes soma-corte{from{clip-path:polygon(0 0,0 0,-58% 100%,-58% 100%)}to{clip-path:polygon(0 0,158% 0,100% 100%,-58% 100%)}}
+.soma-rev{clip-path:polygon(0 0,0 0,-58% 100%,-58% 100%)}
+.soma-rev.is-visible{animation:soma-corte var(--soma-pulso) var(--soma-e-corte) both;animation-delay:calc(var(--soma-i,0) * var(--soma-cuarto))}
+.soma-hero .soma-rev.is-visible{animation-delay:calc(var(--soma-compas) + var(--soma-i,0) * var(--soma-cuarto))}
+/* cinta técnica */
+@keyframes soma-cinta{to{transform:translateX(-50%)}}
+.soma-cinta{overflow:hidden;background:var(--soma-negro);color:var(--soma-tinta);border-top:1px solid var(--soma-linea);border-bottom:1px solid var(--soma-linea)}
+.soma-cinta--acento{background:var(--soma-naranja);color:var(--soma-negro);border:0}
+.soma-cinta__pista{display:flex;width:max-content;animation:soma-cinta var(--soma-frase) linear infinite}
+.soma-cinta:hover .soma-cinta__pista{animation-play-state:paused}
+.soma-cinta__item{flex:none;display:flex;gap:24px;padding:10px 24px 10px 0;white-space:nowrap}
+.soma-cinta__sep{color:var(--soma-naranja)}.soma-cinta--acento .soma-cinta__sep{color:var(--soma-negro)}
+/* hero */
+.soma-hero{position:relative;overflow:hidden;background:var(--soma-negro);color:var(--soma-tinta);font-family:var(--soma-sans)}
+.soma-hero__in{position:relative;z-index:2;max-width:1600px;margin:0 auto;padding:28px 48px 40px;min-height:min(92svh,980px);display:grid;grid-template-rows:auto 1fr auto}
+.soma-hero__top,.soma-hero__bot{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;color:var(--soma-suave)}
+.soma-hero__logo{align-self:center;padding:24px 0}
+.soma-logo-desv{display:block;width:min(100%,1180px);height:auto;color:var(--soma-tinta);overflow:visible}
+.soma-hero__claim{margin:0;font-family:var(--soma-display);font-weight:800;text-transform:uppercase;font-size:clamp(28px,4.2vw,64px);line-height:.95;letter-spacing:-.03em;color:var(--soma-tinta)}
+.soma-hero__cta{display:flex;flex-direction:column;align-items:flex-end;gap:16px}
+.soma-btn{display:inline-flex;align-items:center;height:52px;padding:0 28px;background:var(--soma-naranja);color:var(--soma-negro);border:1px solid var(--soma-naranja);text-decoration:none;font-family:var(--soma-sans);font-weight:600;font-size:13px;letter-spacing:.06em;text-transform:uppercase;transition:background var(--soma-cuarto) linear,color var(--soma-cuarto) linear}
+.soma-btn:hover{background:transparent;color:var(--soma-naranja)}
+.soma-btn:focus-visible{outline:2px solid var(--soma-naranja);outline-offset:3px}
+@media (max-width:767px){.soma-hero__in{padding:20px 20px 32px}.soma-hero__bot{flex-direction:column;align-items:flex-start;gap:24px}.soma-hero__cta{align-items:flex-start}}
+/* hover de producto (tarjetas del tema): gris a color */
+.soma-motion-on .product-card img,.soma-motion-on product-card img{filter:grayscale(1) contrast(1.08);transition:filter var(--soma-medio) var(--soma-e-mec)}
+.soma-motion-on .product-card:hover img,.soma-motion-on product-card:hover img{filter:none}
+/* cursor cruz Ø */
+@media (pointer:fine){.soma-cursor,.soma-cursor a,.soma-cursor button{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='6' fill='none' stroke='%23f2f4f5' stroke-width='1.5'/%3E%3Cpath d='M16 2v8M16 22v8M2 16h8M22 16h8' stroke='%23f2f4f5' stroke-width='1.5'/%3E%3Cpath d='M11 25L21 7' stroke='%23ff5f00' stroke-width='2'/%3E%3C/svg%3E") 16 16,crosshair}}
+@media (prefers-reduced-motion:reduce){.soma-grano,.soma-goteo,.soma-cinta__pista,.soma-rev,.soma-rev.is-visible{animation:none!important;clip-path:none!important;-webkit-mask:none!important;mask:none!important}}
