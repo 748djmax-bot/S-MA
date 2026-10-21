@@ -1,0 +1,45 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {}
+    },
+    "eventos": {
+      "type": "signal",
+      "blocks": {
+        "e1": {
+          "type": "evento",
+          "settings": {
+            "fecha": "2026.11.14",
+            "evento": "SIGNAL 04",
+            "lugar": "Techno industrial. Concreto. Hasta el amanecer.",
+            "coordenadas": "",
+            "lineup": "",
+            "url": "",
+            "en_vivo": false
+          }
+        }
+      },
+      "block_order": [
+        "e1"
+      ],
+      "settings": {
+        "titulo": "CALENDARIO",
+        "subtitulo": "Fecha · Lugar · Coordenadas · Line-up"
+      }
+    },
+    "acceso": {
+      "type": "acceso",
+      "settings": {
+        "etiqueta": "ACCESO",
+        "titulo": "BECOME THE SIGNAL.",
+        "texto": "La dirección exacta llega primero a quienes están en la lista."
+      }
+    }
+  },
+  "order": [
+    "main",
+    "eventos",
+    "acceso"
+  ]
+}

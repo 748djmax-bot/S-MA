@@ -43,7 +43,7 @@
         </a>
       {% endif %}
 
-      <a class="header__accion" href="{{ routes.cart_url }}">
+      <a class="header__accion" href="{{ routes.cart_url }}" data-abrir-bolsa aria-controls="bolsa-lateral">
         {{- 'general.bolsa' | t }}
         <span class="header__bolsa-cuenta" data-bolsa-cuenta>[{{ cart.item_count }}]</span>
       </a>

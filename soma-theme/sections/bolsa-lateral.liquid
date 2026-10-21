@@ -1,0 +1,106 @@
+{% comment %}
+  Bolsa lateral: panel que entra desde la derecha al añadir una pieza.
+  Se vuelve a renderizar con la Section Rendering API (?sections=bolsa-lateral)
+  tras añadir, cambiar cantidad o eliminar; sin JS el enlace del header lleva a /cart.
+{% endcomment %}
+
+<div
+  class="bolsa-lateral"
+  id="bolsa-lateral"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="bolsa-lateral-titulo"
+  data-bolsa-lateral
+  hidden
+>
+  <div class="bolsa-lateral__fondo" data-cerrar-bolsa></div>
+
+  <div class="bolsa-lateral__panel" data-bolsa-contenido>
+    <div class="bolsa-lateral__cabecera">
+      <h2 class="titulo" id="bolsa-lateral-titulo">
+        {{ 'bolsa.titulo' | t }}
+        <span class="etiqueta suave" data-bolsa-cuenta>[{{ cart.item_count }}]</span>
+      </h2>
+      <button type="button" class="header__accion" data-cerrar-bolsa>{{ 'general.cerrar' | t }}</button>
+    </div>
+
+    {% if cart.item_count == 0 %}
+      <div class="bolsa-lateral__vacia">
+        <p class="subtitulo">{{ 'bolsa.vacia' | t }}</p>
+        <a class="boton boton--secundario" href="{{ routes.all_products_collection_url }}">{{ 'bolsa.seguir' | t }}</a>
+      </div>
+    {% else %}
+      <ul class="bolsa-lateral__lista" role="list">
+        {% for item in cart.items %}
+          <li class="linea-bolsa" data-linea="{{ forloop.index }}">
+            <a class="linea-bolsa__media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+              {% if item.image %}
+                {{ item.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
+              {% endif %}
+            </a>
+
+            <div class="linea-bolsa__info">
+              <span class="etiqueta suave">{{ item.product.metafields.soma.codigo.value | default: settings.codigo_coleccion }}</span>
+              <a class="nombre-producto" href="{{ item.url }}" style="text-decoration: none">{{ item.product.title | escape }}</a>
+              {% unless item.product.has_only_default_variant %}
+                <span class="etiqueta suave">{{ item.variant.title | escape }}</span>
+              {% endunless %}
+
+              <div class="linea-bolsa__acciones">
+                <div class="cantidad">
+                  <button
+                    type="button"
+                    data-cambiar-linea="{{ forloop.index }}"
+                    data-cantidad="{{ item.quantity | minus: 1 }}"
+                    aria-label="{{ 'producto.disminuir' | t }} — {{ item.product.title | escape }}"
+                  >
+                    −
+                  </button>
+                  <span class="cantidad__valor" aria-live="polite">{{ item.quantity }}</span>
+                  <button
+                    type="button"
+                    data-cambiar-linea="{{ forloop.index }}"
+                    data-cantidad="{{ item.quantity | plus: 1 }}"
+                    aria-label="{{ 'producto.aumentar' | t }} — {{ item.product.title | escape }}"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  class="boton boton--fantasma"
+                  data-cambiar-linea="{{ forloop.index }}"
+                  data-cantidad="0"
+                >
+                  {{ 'bolsa.eliminar' | t }}
+                </button>
+              </div>
+            </div>
+
+            <div class="linea-bolsa__precio">{{ item.final_line_price | money }}</div>
+          </li>
+        {% endfor %}
+      </ul>
+
+      <div class="bolsa-lateral__pie">
+        <div class="resumen__fila resumen__fila--total">
+          <span>{{ 'bolsa.subtotal' | t }}</span>
+          <span>{{ cart.total_price | money_with_currency }}</span>
+        </div>
+        <p class="cuerpo-s suave">{{ 'bolsa.impuestos' | t }}</p>
+        <form action="{{ routes.cart_url }}" method="post">
+          <button type="submit" name="checkout" class="boton boton--primario boton--bloque">{{ 'bolsa.pagar' | t }}</button>
+        </form>
+        <a class="boton boton--fantasma" href="{{ routes.cart_url }}">{{ 'bolsa.ver_bolsa' | t }}</a>
+      </div>
+    {% endif %}
+
+    <p class="bolsa-lateral__estado mensaje-error" data-bolsa-error role="alert" hidden></p>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Bolsa lateral"
+}
+{% endschema %}

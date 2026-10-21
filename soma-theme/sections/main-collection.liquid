@@ -1,5 +1,7 @@
 {% comment %}
-  Listado de colección: título `display-l`, descripción en 4/12, filtros por etiqueta,
+  Listado de colección: título `display-l`, descripción en 4/12, filtros nativos de Shopify
+  (talla, disponibilidad, precio… configurables con la app Search & Discovery; si no hay,
+  filtra por etiquetas),
   orden y grid de producto 4/2 con hairlines.
 {% endcomment %}
 
@@ -22,7 +24,112 @@
 
   <div class="pagina barra-filtros">
     <div class="filtros-tags">
-      {% if section.settings.mostrar_tags and collection.all_tags.size > 0 %}
+      {% if section.settings.mostrar_filtros and collection.filters.size > 0 %}
+        <form class="filtros" action="{{ collection.url }}" method="get" data-filtros>
+          {% if collection.sort_by != blank %}
+            <input type="hidden" name="sort_by" value="{{ collection.sort_by }}">
+          {% endif %}
+
+          {% for filter in collection.filters %}
+            <details class="filtro">
+              <summary class="tag{% if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil %} tag--invertido{% endif %}">
+                {{- filter.label | escape -}}
+                {%- if filter.active_values.size > 0 %} [{{ filter.active_values.size }}]{% endif -%}
+              </summary>
+
+              <div class="filtro__panel">
+                {% case filter.type %}
+                  {% when 'list', 'boolean' %}
+                    <ul class="filtro__lista" role="list">
+                      {% for value in filter.values %}
+                        <li>
+                          <label class="filtro__opcion{% if value.count == 0 and value.active == false %} filtro__opcion--vacia{% endif %}">
+                            <input
+                              type="checkbox"
+                              name="{{ value.param_name }}"
+                              value="{{ value.value }}"
+                              {% if value.active %}
+                                checked
+                              {% endif %}
+                              {% if value.count == 0 and value.active == false %}
+                                disabled
+                              {% endif %}
+                            >
+                            <span>{{ value.label | escape }}</span>
+                            <span class="suave">{{ value.count }}</span>
+                          </label>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% when 'price_range' %}
+                    {%- liquid
+                      assign max_precio = filter.range_max | divided_by: 100
+                    -%}
+                    <div class="filtro__rango">
+                      <div class="campo">
+                        <label class="campo__label" for="{{ filter.min_value.param_name }}-{{ section.id }}">Desde</label>
+                        <input
+                          class="campo__input"
+                          id="{{ filter.min_value.param_name }}-{{ section.id }}"
+                          type="number"
+                          inputmode="numeric"
+                          name="{{ filter.min_value.param_name }}"
+                          value="{% if filter.min_value.value != nil %}{{ filter.min_value.value | divided_by: 100 }}{% endif %}"
+                          min="0"
+                          placeholder="0"
+                        >
+                      </div>
+                      <div class="campo">
+                        <label class="campo__label" for="{{ filter.max_value.param_name }}-{{ section.id }}">Hasta</label>
+                        <input
+                          class="campo__input"
+                          id="{{ filter.max_value.param_name }}-{{ section.id }}"
+                          type="number"
+                          inputmode="numeric"
+                          name="{{ filter.max_value.param_name }}"
+                          value="{% if filter.max_value.value != nil %}{{ filter.max_value.value | divided_by: 100 }}{% endif %}"
+                          min="0"
+                          placeholder="{{ max_precio }}"
+                        >
+                      </div>
+                      <button type="submit" class="boton boton--secundario">{{ 'coleccion.aplicar' | t }}</button>
+                    </div>
+                {% endcase %}
+              </div>
+            </details>
+          {% endfor %}
+
+          <noscript><button type="submit" class="boton boton--secundario">{{ 'coleccion.aplicar' | t }}</button></noscript>
+        </form>
+
+        {%- liquid
+          assign hay_activos = false
+          for filter in collection.filters
+            if filter.active_values.size > 0 or filter.min_value.value != nil or filter.max_value.value != nil
+              assign hay_activos = true
+            endif
+          endfor
+        -%}
+        {% if hay_activos %}
+          <div class="filtros-activos">
+            {% for filter in collection.filters %}
+              {% for value in filter.active_values %}
+                <a class="tag tag--invertido" href="{{ value.url_to_remove }}" aria-label="{{ 'coleccion.quitar_filtro' | t: filtro: value.label }}">
+                  {{- value.label | escape }} ×
+                </a>
+              {% endfor %}
+              {% if filter.type == 'price_range' %}
+                {% if filter.min_value.value != nil or filter.max_value.value != nil %}
+                  <a class="tag tag--invertido" href="{{ filter.url_to_remove }}">
+                    {{- filter.min_value.value | default: 0 | money }} – {{ filter.max_value.value | default: filter.range_max | money }} ×
+                  </a>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+            <a class="tag tag--suave" href="{{ collection.url }}?sort_by={{ collection.sort_by }}">{{ 'coleccion.limpiar' | t }}</a>
+          </div>
+        {% endif %}
+      {% elsif section.settings.mostrar_tags and collection.all_tags.size > 0 %}
         <a
           class="tag{% if current_tags == blank %} tag--invertido{% endif %}"
           href="{{ collection.url }}"
@@ -82,7 +189,8 @@
   "name": "Colección",
   "settings": [
     { "type": "range", "id": "por_pagina", "label": "Piezas por página", "min": 8, "max": 48, "step": 4, "default": 24 },
-    { "type": "checkbox", "id": "mostrar_tags", "label": "Filtros por etiqueta", "default": true }
+    { "type": "checkbox", "id": "mostrar_filtros", "label": "Filtros (talla, precio, disponibilidad)", "info": "Se configuran en la app Search & Discovery de Shopify.", "default": true },
+    { "type": "checkbox", "id": "mostrar_tags", "label": "Filtros por etiqueta (si no hay filtros)", "default": true }
   ]
 }
 {% endschema %}

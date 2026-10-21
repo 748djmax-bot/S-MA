@@ -133,6 +133,7 @@
     var comparaEl = root.querySelector('[data-precio-compara]');
     var skuEl = root.querySelector('[data-sku]');
     var estadoEl = root.querySelector('[data-estado]');
+    var avisameEl = root.querySelector('[data-avisame]');
     var textos = {
       anadir: root.getAttribute('data-txt-anadir'),
       agotado: root.getAttribute('data-txt-agotado'),
@@ -190,6 +191,13 @@
         }
       }
       if (skuEl) skuEl.textContent = variante.sku || '—';
+      if (avisameEl) {
+        avisameEl.hidden = variante.available;
+        var cuerpo = avisameEl.querySelector('[data-avisame-cuerpo]');
+        if (cuerpo && variante.title) {
+          cuerpo.value = cuerpo.value.replace(/ — [^—]*$/, ' — ' + variante.title);
+        }
+      }
       if (window.history && window.history.replaceState) {
         var url = new URL(window.location.href);
         url.searchParams.set('variant', variante.id);
@@ -226,6 +234,10 @@
             .then(function (r) { return r.json(); })
             .then(function (cart) {
               actualizarBolsa(cart.item_count);
+              if (Bolsa.disponible()) {
+                if (estadoEl) estadoEl.textContent = '';
+                return Bolsa.refrescar().then(function () { Bolsa.abrir(boton); });
+              }
               if (estadoEl) {
                 estadoEl.classList.remove('mensaje-error');
                 estadoEl.innerHTML = '';
@@ -248,6 +260,126 @@
           boton.removeAttribute('aria-busy');
           actualizar();
         });
+    });
+  }
+
+  /* ── Bolsa lateral ── */
+  var Bolsa = (function () {
+    var lastOpener = null;
+    function el() { return document.querySelector('[data-bolsa-lateral]'); }
+    function disponible() { return !!el() && !!window.fetch; }
+    function abrir(opener) {
+      var b = el();
+      if (!b) return;
+      lastOpener = opener || document.activeElement;
+      b.hidden = false;
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(function () { b.classList.add('is-abierta'); });
+      var foco = b.querySelector('[data-cerrar-bolsa].header__accion') || b.querySelector(focusables);
+      if (foco) foco.focus();
+    }
+    function cerrar() {
+      var b = el();
+      if (!b || b.hidden) return;
+      b.classList.remove('is-abierta');
+      document.body.style.overflow = '';
+      setTimeout(function () { b.hidden = true; }, 240);
+      if (lastOpener && lastOpener.focus) lastOpener.focus();
+    }
+    function refrescar() {
+      var url = window.location.pathname + '?sections=bolsa-lateral';
+      return fetch(url, { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (data) {
+          var html = data && data['bolsa-lateral'];
+          if (!html) return;
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var nuevo = doc.querySelector('[data-bolsa-contenido]');
+          var actual = el() && el().querySelector('[data-bolsa-contenido]');
+          if (nuevo && actual) actual.replaceWith(nuevo);
+          var cuenta = doc.querySelector('[data-bolsa-cuenta]');
+          if (cuenta) actualizarBolsa(cuenta.textContent.replace(/[\[\]]/g, ''));
+        });
+    }
+    function cambiarLinea(linea, cantidad) {
+      var b = el();
+      var error = b && b.querySelector('[data-bolsa-error]');
+      if (b) b.setAttribute('aria-busy', 'true');
+      return fetch(window.Shopify.routes.root + 'cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ line: linea, quantity: cantidad })
+      })
+        .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, json: j }; }); })
+        .then(function (res) {
+          if (!res.ok) throw new Error(res.json.description || res.json.message || 'Error');
+          return refrescar();
+        })
+        .catch(function (err) {
+          error = el() && el().querySelector('[data-bolsa-error]');
+          if (error) { error.hidden = false; error.textContent = 'Error — ' + err.message; }
+        })
+        .finally(function () {
+          if (el()) el().removeAttribute('aria-busy');
+          var cerrarBtn = el() && el().querySelector('.header__accion[data-cerrar-bolsa]');
+          if (cerrarBtn) cerrarBtn.focus();
+        });
+    }
+    function init() {
+      if (!disponible()) return;
+      document.addEventListener('click', function (e) {
+        var abridor = e.target.closest('[data-abrir-bolsa]');
+        if (abridor && document.body.classList.contains('plantilla-cart') === false) {
+          e.preventDefault();
+          abrir(abridor);
+          return;
+        }
+        if (e.target.closest('[data-cerrar-bolsa]')) { cerrar(); return; }
+        var cambio = e.target.closest('[data-cambiar-linea]');
+        if (cambio && el() && el().contains(cambio)) {
+          cambiarLinea(parseInt(cambio.getAttribute('data-cambiar-linea'), 10), parseInt(cambio.getAttribute('data-cantidad'), 10));
+        }
+      });
+      document.addEventListener('keydown', function (e) {
+        var b = el();
+        if (!b || b.hidden) return;
+        if (e.key === 'Escape') { cerrar(); return; }
+        if (e.key !== 'Tab') return;
+        var items = b.querySelectorAll(focusables);
+        if (!items.length) return;
+        var first = items[0];
+        var last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      });
+    }
+    return { disponible: disponible, abrir: abrir, cerrar: cerrar, refrescar: refrescar, init: init };
+  })();
+
+  /* ── Paneles laterales (guía de tallas) con <dialog> ── */
+  function initPaneles() {
+    document.querySelectorAll('[data-abrir-tallas]').forEach(function (btn) {
+      var dlg = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!dlg || typeof dlg.showModal !== 'function') return;
+      btn.addEventListener('click', function () { dlg.showModal(); });
+      dlg.addEventListener('click', function (e) {
+        if (e.target === dlg || e.target.closest('[data-cerrar-panel]')) dlg.close();
+      });
+    });
+  }
+
+  /* ── Filtros de colección: enviar al cambiar ── */
+  function initFiltros() {
+    document.querySelectorAll('form[data-filtros]').forEach(function (form) {
+      form.addEventListener('change', function (e) {
+        if (e.target.matches('input[type="number"]')) return;
+        form.requestSubmit ? form.requestSubmit() : form.submit();
+      });
+      form.addEventListener('submit', function () {
+        form.querySelectorAll('input[type="number"]').forEach(function (i) {
+          if (i.value === '') i.disabled = true;
+        });
+      });
     });
   }
 
@@ -315,6 +447,9 @@
     initOrden();
     initBolsa();
     initRecomendaciones();
+    initPaneles();
+    initFiltros();
+    Bolsa.init();
     document.querySelectorAll('[data-producto]').forEach(initProducto);
   }
 

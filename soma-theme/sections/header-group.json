@@ -5,9 +5,12 @@
     "header": {
       "type": "header",
       "settings": {
-        "menu": "main-menu"
+        "menu": "soma-menu",
+        "menu_indice": "soma-menu"
       }
     }
   },
-  "order": ["header"]
+  "order": [
+    "header"
+  ]
 }

@@ -35,7 +35,13 @@
     "sin_imagen": "Sin imagen",
     "precio_desde": "Desde {{ price }}",
     "precio_regular": "Precio regular",
-    "precio_oferta": "Precio"
+    "precio_oferta": "Precio",
+    "restantes": "PZ restantes",
+    "avisame": "Avísame",
+    "avisame_titulo": "Agotado. Avísame si vuelve.",
+    "avisame_texto": "Un solo email si la talla vuelve. Nada más.",
+    "avisame_gracias": "Anotado. Te escribimos si vuelve.",
+    "avisame_cuerpo": "Avísame: {{ producto }} — {{ variante }}"
   },
   "coleccion": {
     "piezas": {
@@ -44,7 +50,10 @@
     },
     "ordenar": "Ordenar",
     "vacia": "Sin piezas por ahora.",
-    "todas": "Todo"
+    "todas": "Todo",
+    "aplicar": "Aplicar",
+    "limpiar": "Limpiar filtros",
+    "quitar_filtro": "Quitar filtro {{ filtro }}"
   },
   "colecciones": {
     "titulo": "Colecciones"
@@ -59,7 +68,8 @@
     "pagar": "Pagar",
     "actualizar": "Actualizar",
     "nota": "Nota del pedido",
-    "descuento": "Descuento"
+    "descuento": "Descuento",
+    "ver_bolsa": "Ver bolsa completa"
   },
   "busqueda": {
     "titulo": "Búsqueda",

@@ -4,10 +4,11 @@
       "type": "main-product",
       "blocks": {
         "tallas": {
-          "type": "desplegable",
+          "type": "tallas",
           "settings": {
             "titulo": "Guía de tallas",
-            "contenido": "<p>Todas las prendas tienen corte oversized: están pensadas para quedar amplias. Si prefieres un fit más ajustado, elige una talla menos de la que usas normalmente.</p><p>Las gorras son de talla única con cierre ajustable.</p>"
+            "contenido": "<p>Todas las prendas tienen corte oversized: están pensadas para quedar amplias. Si prefieres un fit más ajustado, elige una talla menos de la que usas normalmente.</p><p>Las gorras son de talla única con cierre ajustable.</p>",
+            "pagina": "guia-de-tallas"
           }
         },
         "envios": {
@@ -18,8 +19,13 @@
           }
         }
       },
-      "block_order": ["tallas", "envios"],
-      "settings": {}
+      "block_order": [
+        "tallas",
+        "envios"
+      ],
+      "settings": {
+        "mostrar_avisame": true
+      }
     },
     "relacionados": {
       "type": "productos-relacionados",
@@ -30,5 +36,8 @@
       }
     }
   },
-  "order": ["main", "relacionados"]
+  "order": [
+    "main",
+    "relacionados"
+  ]
 }

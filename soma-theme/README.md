@@ -21,6 +21,15 @@ Tema Online Store 2.0 para **somaart7.myshopify.com**, construido con Shopify CL
 - **Producto:** galería 8/12 + ficha técnica sticky 4/12, botón único «AÑADIR A LA BOLSA», piezas relacionadas
 - Colección, lista de colecciones (Archivo), bolsa, búsqueda, página, contacto (`page.contact`), blog, artículo, 404, contraseña, tarjeta de regalo
 
+## Funciones de tienda
+
+- **Bolsa lateral:** se abre al añadir una pieza; cambia cantidades sin salir de la página (Section Rendering API).
+- **Guía de tallas:** bloque «Guía de tallas» del producto; abre un panel lateral con el texto del bloque y la tabla de la página `guia-de-tallas`.
+- **PZ restantes:** si la pieza tiene `soma.edicion` y Shopify controla su inventario, muestra el stock real sobre la edición.
+- **Avísame:** en tallas agotadas, formulario que llega como mensaje de contacto al email de la tienda.
+- **Filtros de colección:** talla, precio y disponibilidad con los filtros nativos (app Search & Discovery); si no hay, filtra por etiquetas.
+- **Página Signal:** plantilla `page.signal` con el calendario de eventos.
+
 ## Metacampos de producto (opcionales)
 
 Crear en *Configuración › Metacampos › Productos* con namespace `soma`:
@@ -35,8 +44,10 @@ Etiquetas de producto: `drop` (tag naranja DROP) y `core` (tag CORE).
 
 ## Menús
 
-- `main-menu`: navegación del header y menú índice a pantalla completa (01 NEW · 02 OUTERWEAR…)
-- `footer`: columna de enlaces del pie
+- `soma-menu`: navegación del header y menú índice a pantalla completa (New · Hoodies · Camisetas · Pants · Gorras · Signal · Archivo)
+- `soma-footer`: columna de enlaces del pie (envíos, cambios, tallas, sobre SØMA, contacto, privacidad)
+
+Son menús propios de SØMA: el tema activo de la tienda sigue usando `main-menu` y `footer`.
 
 ## Comandos
 

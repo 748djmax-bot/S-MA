@@ -7,15 +7,22 @@
       "blocks": {
         "info": {
           "type": "menu",
-          "settings": { "titulo": "Info", "menu": "footer" }
+          "settings": {
+            "titulo": "Info",
+            "menu": "soma-footer"
+          }
         }
       },
-      "block_order": ["info"],
+      "block_order": [
+        "info"
+      ],
       "settings": {
         "frase": "Ropa para habitar la ciudad de noche.",
         "mostrar_pagos": true
       }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

@@ -7,6 +7,11 @@
   - soma.edicion (entero)             → 150
   - soma.ficha   (texto multilínea)    → una línea por dato, «Clave: Valor»
                                           p. ej. «Material: Ripstop 210D»
+
+  Piezas restantes: si la pieza tiene «soma.edicion» y Shopify controla su inventario,
+  se muestra «PZ RESTANTES n/edición» con el stock real (escasez verdadera, sin contadores falsos).
+  Agotado: cuando la variante elegida no tiene stock aparece «Avísame», un formulario de contacto
+  que llega al email de la tienda con la pieza y la talla.
 {% endcomment %}
 
 {%- liquid
@@ -15,6 +20,19 @@
   assign edicion = product.metafields.soma.edicion.value
   assign ficha = product.metafields.soma.ficha.value
   assign tags_lower = product.tags | join: ',' | downcase | split: ','
+
+  assign bloque_tallas = section.blocks | where: 'type', 'tallas' | first
+
+  assign controla_stock = false
+  assign restantes = 0
+  for v in product.variants
+    if v.inventory_management == 'shopify'
+      assign controla_stock = true
+      if v.inventory_quantity > 0
+        assign restantes = restantes | plus: v.inventory_quantity
+      endif
+    endif
+  endfor
 -%}
 
 <section
@@ -89,6 +107,23 @@
 
         {% if edicion != blank %}
           <p class="etiqueta suave">{{ 'producto.edicion_limitada' | t: count: edicion }}</p>
+          {% if controla_stock and product.available %}
+            {%- liquid
+              assign ancho_restantes = restantes | times: 100 | divided_by: edicion
+              if ancho_restantes > 100
+                assign ancho_restantes = 100
+              endif
+            -%}
+            <div class="restantes">
+              <p class="etiqueta">
+                {{ 'producto.restantes' | t }}
+                <span class="restantes__num">{{ restantes }}/{{ edicion }}</span>
+              </p>
+              <div class="restantes__barra" aria-hidden="true">
+                <span style="width: {{ ancho_restantes }}%"></span>
+              </div>
+            </div>
+          {% endif %}
         {% endif %}
 
         {%- form 'product', product, data-form-producto: '', class: 'compra', novalidate: 'novalidate' -%}
@@ -98,8 +133,12 @@
             {% for option in product.options_with_values %}
               <fieldset class="opciones" data-opcion>
                 <legend class="etiqueta suave">
-                  <span>{{ option.name | escape }}</span>
-                  <span data-opcion-valor>{{ option.selected_value | escape }}</span>
+                  <span>{{ option.name | escape }} — <span data-opcion-valor>{{ option.selected_value | escape }}</span></span>
+                  {% if bloque_tallas and forloop.first %}
+                    <button type="button" class="enlace-tallas" data-abrir-tallas aria-controls="tallas-{{ section.id }}">
+                      {{- bloque_tallas.settings.titulo | escape -}}
+                    </button>
+                  {% endif %}
                 </legend>
                 <div class="opciones__lista">
                   {% for value in option.values %}
@@ -156,6 +195,41 @@
           <p class="compra__estado etiqueta" data-estado role="status" aria-live="polite"></p>
         {%- endform -%}
 
+        {% if section.settings.mostrar_avisame %}
+          <div class="avisame" data-avisame {% if variante.available %}hidden{% endif %}>
+            {%- form 'contact', id: 'avisame-form', class: 'avisame__form' -%}
+              {% if form.posted_successfully? %}
+                <p class="etiqueta acento" role="status">{{ 'producto.avisame_gracias' | t }}</p>
+              {% else %}
+                <p class="etiqueta">{{ 'producto.avisame_titulo' | t }}</p>
+                <p class="cuerpo-s suave">{{ 'producto.avisame_texto' | t }}</p>
+                <input
+                  type="hidden"
+                  name="contact[body]"
+                  value="{{ 'producto.avisame_cuerpo' | t: producto: product.title, variante: variante.title }}"
+                  data-avisame-cuerpo
+                >
+                <div class="acceso__form">
+                  <label class="sr-only" for="avisame-email-{{ section.id }}">{{ 'acceso.email' | t }}</label>
+                  <input
+                    class="campo__input"
+                    id="avisame-email-{{ section.id }}"
+                    type="email"
+                    name="contact[email]"
+                    autocomplete="email"
+                    placeholder="{{ 'acceso.email' | t }}"
+                    required
+                  >
+                  <button type="submit" class="boton boton--secundario">{{ 'producto.avisame' | t }}</button>
+                </div>
+                {% if form.errors %}
+                  <div class="mensaje-error" role="alert">Error — {{ form.errors | default_errors }}</div>
+                {% endif %}
+              {% endif %}
+            {%- endform -%}
+          </div>
+        {% endif %}
+
         <div class="ficha">
           <h2 class="ficha__titulo etiqueta">{{ 'producto.ficha' | t }}</h2>
           <dl class="ficha__dl">
@@ -192,6 +266,9 @@
         {% endif %}
 
         {% for block in section.blocks %}
+          {% if block.type == 'tallas' %}
+            {% continue %}
+          {% endif %}
           <details class="desplegable" {{ block.shopify_attributes }}>
             <summary class="etiqueta">{{ block.settings.titulo | escape }}</summary>
             <div class="desplegable__cuerpo rte cuerpo-s">
@@ -206,6 +283,21 @@
     </div>
   </div>
 
+  {% if bloque_tallas %}
+    <dialog class="panel-lateral" id="tallas-{{ section.id }}" aria-labelledby="tallas-titulo-{{ section.id }}" data-panel-tallas {{ bloque_tallas.shopify_attributes }}>
+      <div class="panel-lateral__cabecera">
+        <h2 class="titulo" id="tallas-titulo-{{ section.id }}">{{ bloque_tallas.settings.titulo | escape }}</h2>
+        <button type="button" class="header__accion" data-cerrar-panel>{{ 'general.cerrar' | t }}</button>
+      </div>
+      <div class="panel-lateral__cuerpo rte cuerpo-s tabla-tecnica">
+        {{ bloque_tallas.settings.contenido }}
+        {% if bloque_tallas.settings.pagina != blank %}
+          {{ bloque_tallas.settings.pagina.content }}
+        {% endif %}
+      </div>
+    </dialog>
+  {% endif %}
+
   <script type="application/json" data-variantes>
     [
       {%- for v in product.variants -%}
@@ -215,6 +307,7 @@
           "price": {{ v.price | json }},
           "compare_at_price": {{ v.compare_at_price | default: 0 | json }},
           "sku": {{ v.sku | json }},
+          "title": {{ v.title | json }},
           "options": {{ v.options | json }},
           "featured_media": {% if v.featured_media %}{ "id": {{ v.featured_media.id }} }{% else %}null{% endif %}
         }{% unless forloop.last %},{% endunless %}
@@ -228,7 +321,8 @@
   "name": "Producto",
   "settings": [
     { "type": "checkbox", "id": "mostrar_cantidad", "label": "Selector de cantidad", "default": false },
-    { "type": "checkbox", "id": "mostrar_pago_dinamico", "label": "Botón de pago dinámico (Shop Pay, etc.)", "default": false }
+    { "type": "checkbox", "id": "mostrar_pago_dinamico", "label": "Botón de pago dinámico (Shop Pay, etc.)", "default": false },
+    { "type": "checkbox", "id": "mostrar_avisame", "label": "«Avísame» en piezas agotadas", "info": "Llega como mensaje de contacto al email de la tienda.", "default": true }
   ],
   "blocks": [
     {
@@ -238,6 +332,16 @@
         { "type": "text", "id": "titulo", "label": "Título", "default": "Envíos y cambios" },
         { "type": "richtext", "id": "contenido", "label": "Contenido", "default": "<p>Envíos en 2–5 días hábiles. Cambios dentro de 14 días, sin uso y con hang tag.</p>" },
         { "type": "page", "id": "pagina", "label": "Contenido desde una página" }
+      ]
+    },
+    {
+      "type": "tallas",
+      "name": "Guía de tallas",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "titulo", "label": "Título", "default": "Guía de tallas" },
+        { "type": "richtext", "id": "contenido", "label": "Contenido", "default": "<p>Corte oversized. Si prefieres un fit más ajustado, elige una talla menos.</p>" },
+        { "type": "page", "id": "pagina", "label": "Tabla de medidas desde una página", "info": "Usa la página «Guía de tallas»." }
       ]
     }
   ]
