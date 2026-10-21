@@ -1,0 +1,88 @@
+{% comment %}
+  Wallpapers SØMA: fondos de pantalla 4K para móvil (2160 × 4680, 9:19.5).
+  Cada bloque es un fondo; el botón abre la imagen original a tamaño completo para guardarla.
+{% endcomment %}
+
+<section class="seccion wallpapers">
+  <div class="pagina">
+    <div class="wallpapers__cabecera grid-12">
+      <div class="wallpapers__titulo">
+        <p class="micro suave">{{ section.settings.etiqueta | escape }}</p>
+        <h1 class="display-xl">{{ section.settings.titulo | escape }}</h1>
+      </div>
+      <div class="wallpapers__intro">
+        {% if section.settings.texto != blank %}
+          <div class="cuerpo rte">{{ section.settings.texto }}</div>
+        {% endif %}
+        <ol class="wallpapers__pasos micro suave" role="list">
+          <li><span>01</span> {{ 'wallpapers.paso_1' | t }}</li>
+          <li><span>02</span> {{ 'wallpapers.paso_2' | t }}</li>
+          <li><span>03</span> {{ 'wallpapers.paso_3' | t }}</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+
+  <div class="pagina" style="padding-left: 0; padding-right: 0">
+    <ul class="wallpapers__grid" role="list">
+      {% for block in section.blocks %}
+        {%- assign img = block.settings.imagen -%}
+        <li class="wallpaper soma-rev" style="--soma-i: {{ forloop.index0 | modulo: 4 }}" {{ block.shopify_attributes }}>
+          <div class="wallpaper__pantalla">
+            {% if img != blank %}
+              {{ img | image_url: width: 720 | image_tag: loading: 'lazy', widths: '360, 540, 720', sizes: '(min-width: 1024px) 22vw, 45vw', alt: img.alt | default: block.settings.nombre }}
+            {% else %}
+              <span class="tarjeta__ph">{% render 'cruz' %}</span>
+            {% endif %}
+          </div>
+          <div class="wallpaper__meta">
+            <span class="etiqueta suave">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <h2 class="nombre-producto">{{ block.settings.nombre | escape }}</h2>
+            {% if img != blank %}
+              <p class="micro suave">{{ img.width }} × {{ img.height }} · 4K</p>
+            {% endif %}
+          </div>
+          {% if img != blank %}
+            <a
+              class="boton boton--secundario boton--bloque"
+              href="{{ img | image_url }}"
+              target="_blank"
+              rel="noopener"
+              download="{{ block.settings.nombre | handle | prepend: 'soma-wallpaper-' }}.jpg"
+            >
+              {{- 'wallpapers.descargar' | t -}}
+              <span class="sr-only"> — {{ block.settings.nombre | escape }}</span>
+            </a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="pagina">
+    <p class="micro suave wallpapers__legal">{{ section.settings.legal | escape }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Wallpapers",
+  "settings": [
+    { "type": "text", "id": "etiqueta", "label": "Etiqueta", "default": "Descargas — 4K" },
+    { "type": "text", "id": "titulo", "label": "Título", "default": "WALLPAPERS." },
+    { "type": "richtext", "id": "texto", "label": "Texto", "default": "<p>La señal también en la pantalla. Fondos 4K para móvil con los logos oficiales de SØMA.</p>" },
+    { "type": "text", "id": "legal", "label": "Nota legal", "default": "Uso personal. Los logos de SØMA no pueden usarse con fines comerciales sin permiso." }
+  ],
+  "blocks": [
+    {
+      "type": "wallpaper",
+      "name": "Wallpaper",
+      "settings": [
+        { "type": "image_picker", "id": "imagen", "label": "Imagen", "info": "Vertical 9:19.5, idealmente 2160 × 4680 px." },
+        { "type": "text", "id": "nombre", "label": "Nombre", "default": "Noche" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Wallpapers" }]
+}
+{% endschema %}

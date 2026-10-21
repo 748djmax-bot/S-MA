@@ -1,0 +1,57 @@
+{
+  "sections": {
+    "portada": {
+      "type": "coleccion-portada",
+      "blocks": {
+        "d1": {
+          "type": "dato",
+          "settings": {
+            "clave": "Fit",
+            "valor": "Oversized"
+          }
+        },
+        "d2": {
+          "type": "dato",
+          "settings": {
+            "clave": "Tallas",
+            "valor": "S — XL"
+          }
+        },
+        "d3": {
+          "type": "dato",
+          "settings": {
+            "clave": "Serie",
+            "valor": "Corta · sin reposición"
+          }
+        }
+      },
+      "block_order": [
+        "d1",
+        "d2",
+        "d3"
+      ],
+      "settings": {
+        "estilo": "capa",
+        "numero": "01",
+        "etiqueta": "Capa",
+        "claim": "Hechos para la noche. Algodón pesado, hombro caído."
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "mostrar_cabecera": false,
+        "por_pagina": 24,
+        "mostrar_filtros": true,
+        "mostrar_tags": false,
+        "columnas": "2",
+        "proporcion": "4 / 5",
+        "tema": "noche"
+      }
+    }
+  },
+  "order": [
+    "portada",
+    "main"
+  ]
+}

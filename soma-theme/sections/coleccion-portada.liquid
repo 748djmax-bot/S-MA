@@ -1,0 +1,157 @@
+{% comment %}
+  Portada de categoría: cada apartado (Hoodies, Pants, Camisetas, Gorras) tiene su propio
+  diseño dentro del sistema SØMA. El estilo se elige en la sección:
+  - capa   → Hoodies: titular enorme con eco en contorno, foto cortada a 60°, corte naranja.
+  - pierna → Pants: título vertical, foto alta y regla técnica de medidas.
+  - base   → Camisetas: tema Galería (claro), editorial, nombre en gótica.
+  - senal  → Gorras: banda naranja (objeto-señal) y foto en el anillo Ø.
+  La imagen sale de la sección, de la imagen de la colección o del primer producto.
+{% endcomment %}
+
+{%- liquid
+  assign estilo = section.settings.estilo
+  assign titulo = section.settings.titulo | default: collection.title
+  assign imagen = section.settings.imagen
+  if imagen == blank
+    assign imagen = collection.image
+  endif
+  if imagen == blank
+    assign imagen = collection.products.first.featured_media.preview_image
+  endif
+  assign numero = section.settings.numero
+  assign letras = titulo | size
+-%}
+
+<section
+  style="--letras: {{ letras }};"
+  class="portada portada--{{ estilo }}{% if estilo == 'base' %} tema-galeria{% endif %}{% if settings.grano and estilo != 'base' %} grano{% endif %}"
+  aria-labelledby="portada-titulo-{{ section.id }}"
+>
+  {% case estilo %}
+    {% when 'capa' %}
+      {% if imagen != blank %}
+        <div class="portada__media soma-rev">
+          {{ imagen | image_url: width: 1800 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600, 900, 1200, 1800', sizes: '(min-width: 1024px) 55vw, 100vw', alt: '' }}
+        </div>
+      {% endif %}
+      <span class="corte" aria-hidden="true"></span>
+      <div class="pagina portada__interior registro">
+        <div class="portada__fila micro suave">
+          <span>{{ numero }} — {{ section.settings.etiqueta | escape }}</span>
+          <span>{{ 'coleccion.piezas' | t: count: collection.products_count }}</span>
+        </div>
+        <div class="portada__titulos portada__ajuste">
+          <span class="portada__eco display-xl" aria-hidden="true">{{ titulo | escape }}</span>
+          <h1 class="portada__titulo display-xl" id="portada-titulo-{{ section.id }}">{{ titulo | escape }}</h1>
+          {% if section.settings.claim != blank %}
+            <p class="subtitulo portada__claim">{{ section.settings.claim | escape }}</p>
+          {% endif %}
+        </div>
+        {% render 'portada-datos', section: section %}
+      </div>
+
+    {% when 'pierna' %}
+      <div class="pagina portada__interior">
+        <h1 class="portada__vertical display-xl" id="portada-titulo-{{ section.id }}">{{ titulo | escape }}</h1>
+        <div class="portada__media soma-rev">
+          {% if imagen != blank %}
+            {{ imagen | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '400, 800, 1200', sizes: '(min-width: 1024px) 34vw, 70vw', alt: '' }}
+          {% endif %}
+        </div>
+        <div class="portada__regla">
+          <p class="micro suave">{{ numero }} — {{ section.settings.etiqueta | escape }}</p>
+          <div class="portada__escala" aria-hidden="true"></div>
+          {% if section.settings.claim != blank %}
+            <p class="subtitulo">{{ section.settings.claim | escape }}</p>
+          {% endif %}
+          {% render 'portada-datos', section: section %}
+          <p class="micro suave">{{ 'coleccion.piezas' | t: count: collection.products_count }}</p>
+        </div>
+      </div>
+
+    {% when 'base' %}
+      <div class="pagina portada__interior grid-12">
+        <div class="portada__texto portada__ajuste">
+          <p class="micro suave">{{ numero }} — {{ section.settings.etiqueta | escape }}</p>
+          <h1 class="display-xl" id="portada-titulo-{{ section.id }}">{{ titulo | escape }}</h1>
+          {% if section.settings.nombre_gotica != blank %}
+            <p class="gotica-l">{{ section.settings.nombre_gotica | escape }}</p>
+          {% endif %}
+          {% if section.settings.claim != blank %}
+            <p class="subtitulo">{{ section.settings.claim | escape }}</p>
+          {% endif %}
+          {% render 'portada-datos', section: section %}
+        </div>
+        <div class="portada__media soma-rev">
+          {% if imagen != blank %}
+            {{ imagen | image_url: width: 1800 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '600, 900, 1200, 1800', sizes: '(min-width: 1024px) 58vw, 100vw', alt: '' }}
+          {% endif %}
+        </div>
+      </div>
+
+    {% when 'senal' %}
+      <div class="portada__banda">
+        <div class="pagina portada__banda-in micro">
+          <span>{{ numero }} — {{ section.settings.etiqueta | escape }}</span>
+          <span>{{ section.settings.banda | escape }}</span>
+        </div>
+      </div>
+      <div class="pagina portada__interior">
+        <div class="portada__texto portada__ajuste">
+          <h1 class="display-xl" id="portada-titulo-{{ section.id }}">{{ titulo | escape }}</h1>
+          {% if section.settings.claim != blank %}
+            <p class="subtitulo">{{ section.settings.claim | escape }}</p>
+          {% endif %}
+          {% render 'portada-datos', section: section %}
+          <p class="micro suave">{{ 'coleccion.piezas' | t: count: collection.products_count }}</p>
+        </div>
+        <div class="portada__anillo soma-rev">
+          <span class="portada__anillo-eco" aria-hidden="true"></span>
+          <div class="portada__anillo-media">
+            {% if imagen != blank %}
+              {{ imagen | image_url: width: 1200 | image_tag: loading: 'eager', fetchpriority: 'high', widths: '400, 800, 1200', sizes: '(min-width: 1024px) 40vw, 80vw', alt: '' }}
+            {% endif %}
+          </div>
+          <span class="portada__anillo-barra" aria-hidden="true"></span>
+        </div>
+      </div>
+  {% endcase %}
+</section>
+
+{% schema %}
+{
+  "name": "Portada de categoría",
+  "settings": [
+    {
+      "type": "select",
+      "id": "estilo",
+      "label": "Diseño",
+      "options": [
+        { "value": "capa", "label": "Capa (Hoodies)" },
+        { "value": "pierna", "label": "Pierna (Pants)" },
+        { "value": "base", "label": "Base (Camisetas)" },
+        { "value": "senal", "label": "Señal (Gorras)" }
+      ],
+      "default": "capa"
+    },
+    { "type": "text", "id": "titulo", "label": "Título", "info": "Vacío = nombre de la colección." },
+    { "type": "text", "id": "numero", "label": "Número", "default": "01" },
+    { "type": "text", "id": "etiqueta", "label": "Etiqueta", "default": "Outerwear" },
+    { "type": "text", "id": "claim", "label": "Bajada" },
+    { "type": "text", "id": "nombre_gotica", "label": "Nombre en gótica (solo Base)", "info": "Una vez por página. Mayúscula inicial." },
+    { "type": "text", "id": "banda", "label": "Texto de la banda naranja (solo Señal)", "default": "Talla única · ajustable" },
+    { "type": "image_picker", "id": "imagen", "label": "Imagen", "info": "Vacío = imagen de la colección o primer producto." }
+  ],
+  "blocks": [
+    {
+      "type": "dato",
+      "name": "Dato técnico",
+      "settings": [
+        { "type": "text", "id": "clave", "label": "Clave", "default": "Fit" },
+        { "type": "text", "id": "valor", "label": "Valor", "default": "Oversized" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Portada de categoría" }]
+}
+{% endschema %}

@@ -1,0 +1,59 @@
+{% comment %}
+  Referentes SØMA: muro de imágenes de marca (campaña, pósters, escena, materiales).
+  Columnas tipo masonry con hairlines; cada imagen lleva número, título y créditos.
+{% endcomment %}
+
+<section class="seccion seccion--hairline referentes">
+  <div class="pagina">
+    <div class="cabecera-seccion">
+      <h2 class="titulo">{{ section.settings.titulo | escape }}</h2>
+      {% if section.settings.subtitulo != blank %}
+        <p class="etiqueta suave">{{ section.settings.subtitulo | escape }}</p>
+      {% endif %}
+    </div>
+
+    <ul class="referentes__muro" role="list">
+      {% for block in section.blocks %}
+        {%- assign img = block.settings.imagen -%}
+        <li class="referente soma-rev" style="--soma-i: {{ forloop.index0 | modulo: 3 }}" {{ block.shopify_attributes }}>
+          {% if img != blank %}
+            <a class="referente__media" href="{{ img | image_url }}" target="_blank" rel="noopener">
+              {{ img | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '400, 800, 1200', sizes: '(min-width: 1024px) 33vw, 100vw', alt: img.alt | default: block.settings.titulo }}
+            </a>
+          {% else %}
+            <div class="referente__media referente__media--vacia"><span class="tarjeta__ph">{% render 'cruz' %}</span></div>
+          {% endif %}
+          <div class="referente__pie">
+            <span class="micro suave">Fig. {{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="micro">{{ block.settings.titulo | escape }}</span>
+          </div>
+          {% if block.settings.credito != blank %}
+            <p class="micro suave">{{ block.settings.credito | escape }}</p>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Referentes",
+  "settings": [
+    { "type": "text", "id": "titulo", "label": "Título", "default": "REFERENTES" },
+    { "type": "text", "id": "subtitulo", "label": "Subtítulo", "default": "Concreto · noche · señal" }
+  ],
+  "blocks": [
+    {
+      "type": "imagen",
+      "name": "Imagen",
+      "settings": [
+        { "type": "image_picker", "id": "imagen", "label": "Imagen" },
+        { "type": "text", "id": "titulo", "label": "Título", "default": "Concreto" },
+        { "type": "text", "id": "credito", "label": "Créditos", "info": "Foto, lugar, artista." }
+      ]
+    }
+  ],
+  "presets": [{ "name": "Referentes" }]
+}
+{% endschema %}

@@ -1,0 +1,57 @@
+{
+  "sections": {
+    "portada": {
+      "type": "coleccion-portada",
+      "blocks": {
+        "d1": {
+          "type": "dato",
+          "settings": {
+            "clave": "Cortes",
+            "valor": "Cargo · Denim · Track · Short"
+          }
+        },
+        "d2": {
+          "type": "dato",
+          "settings": {
+            "clave": "Fit",
+            "valor": "Oversized"
+          }
+        },
+        "d3": {
+          "type": "dato",
+          "settings": {
+            "clave": "Tallas",
+            "valor": "S — XL"
+          }
+        }
+      },
+      "block_order": [
+        "d1",
+        "d2",
+        "d3"
+      ],
+      "settings": {
+        "estilo": "pierna",
+        "numero": "02",
+        "etiqueta": "Pierna",
+        "claim": "Pierna ancha, caída pesada."
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "mostrar_cabecera": false,
+        "por_pagina": 24,
+        "mostrar_filtros": true,
+        "mostrar_tags": false,
+        "columnas": "3",
+        "proporcion": "2 / 3",
+        "tema": "noche"
+      }
+    }
+  },
+  "order": [
+    "portada",
+    "main"
+  ]
+}

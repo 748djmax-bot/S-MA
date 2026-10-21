@@ -1,0 +1,50 @@
+{
+  "sections": {
+    "portada": {
+      "type": "coleccion-portada",
+      "blocks": {
+        "d1": {
+          "type": "dato",
+          "settings": {
+            "clave": "Talla",
+            "valor": "Única · ajustable"
+          }
+        },
+        "d2": {
+          "type": "dato",
+          "settings": {
+            "clave": "Serie",
+            "valor": "Corta"
+          }
+        }
+      },
+      "block_order": [
+        "d1",
+        "d2"
+      ],
+      "settings": {
+        "estilo": "senal",
+        "numero": "04",
+        "etiqueta": "Señal",
+        "banda": "Talla única · ajustable",
+        "claim": "La señal sobre la cabeza."
+      }
+    },
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "mostrar_cabecera": false,
+        "por_pagina": 24,
+        "mostrar_filtros": true,
+        "mostrar_tags": false,
+        "columnas": "3",
+        "proporcion": "1 / 1",
+        "tema": "noche"
+      }
+    }
+  },
+  "order": [
+    "portada",
+    "main"
+  ]
+}

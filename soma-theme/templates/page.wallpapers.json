@@ -1,0 +1,133 @@
+{
+  "sections": {
+    "wallpapers": {
+      "type": "wallpapers",
+      "blocks": {
+        "w1": {
+          "type": "wallpaper",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-wallpaper-01-noche.jpg",
+            "nombre": "Noche"
+          }
+        },
+        "w2": {
+          "type": "wallpaper",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-wallpaper-02-cruz.jpg",
+            "nombre": "Cruz Ø"
+          }
+        },
+        "w3": {
+          "type": "wallpaper",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-wallpaper-03-corte.jpg",
+            "nombre": "El corte"
+          }
+        },
+        "w4": {
+          "type": "wallpaper",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-wallpaper-04-senal.jpg",
+            "nombre": "Señal"
+          }
+        },
+        "w5": {
+          "type": "wallpaper",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-wallpaper-05-claim.jpg",
+            "nombre": "Not made to fit"
+          }
+        },
+        "w6": {
+          "type": "wallpaper",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-wallpaper-06-plano.jpg",
+            "nombre": "Plano técnico"
+          }
+        },
+        "w7": {
+          "type": "wallpaper",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-wallpaper-07-galeria.jpg",
+            "nombre": "Galería"
+          }
+        }
+      },
+      "block_order": [
+        "w1",
+        "w2",
+        "w3",
+        "w4",
+        "w5",
+        "w6",
+        "w7"
+      ],
+      "settings": {
+        "etiqueta": "Descargas — 4K",
+        "titulo": "WALLPAPERS.",
+        "texto": "<p>La señal también en la pantalla. Fondos 4K para móvil con los logos oficiales de SØMA.</p>",
+        "legal": "Uso personal. Los logos de SØMA no pueden usarse con fines comerciales sin permiso."
+      }
+    },
+    "referentes": {
+      "type": "galeria-referentes",
+      "blocks": {
+        "r1": {
+          "type": "imagen",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-referente-01-manifiesto.jpg",
+            "titulo": "Manifiesto",
+            "credito": "SØMA — Sistema gráfico"
+          }
+        },
+        "r2": {
+          "type": "imagen",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-referente-02-concreto.jpg",
+            "titulo": "Concreto",
+            "credito": "SØMA — Sistema gráfico"
+          }
+        },
+        "r3": {
+          "type": "imagen",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-referente-03-signal.jpg",
+            "titulo": "Signal 04",
+            "credito": "SØMA — Sistema gráfico"
+          }
+        },
+        "r4": {
+          "type": "imagen",
+          "settings": {
+            "imagen": "shopify://shop_images/soma-referente-04-paleta.jpg",
+            "titulo": "Paleta 70 · 20 · 7 · 3",
+            "credito": "SØMA — Sistema gráfico"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "settings": {
+        "titulo": "REFERENTES",
+        "subtitulo": "Concreto · noche · señal"
+      }
+    },
+    "acceso": {
+      "type": "acceso",
+      "settings": {
+        "etiqueta": "ACCESO",
+        "titulo": "BECOME THE SIGNAL.",
+        "texto": "Nuevos fondos y acceso anticipado al próximo drop, primero en tu email."
+      }
+    }
+  },
+  "order": [
+    "wallpapers",
+    "referentes",
+    "acceso"
+  ]
+}

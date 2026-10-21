@@ -9,7 +9,11 @@
   assign orden_actual = collection.sort_by | default: collection.default_sort_by
 -%}
 
-<section>
+<section
+  class="coleccion coleccion--{{ section.settings.columnas }}col{% if section.settings.tema == 'galeria' %} tema-galeria{% endif %}"
+  style="--proporcion: {{ section.settings.proporcion }};"
+>
+  {% if section.settings.mostrar_cabecera %}
   <div class="pagina coleccion__cabecera">
     <div class="grid-12">
       <p class="etiqueta suave" style="grid-column: 1 / -1">
@@ -21,6 +25,7 @@
       {% endif %}
     </div>
   </div>
+  {% endif %}
 
   <div class="pagina barra-filtros">
     <div class="filtros-tags">
@@ -180,15 +185,48 @@
 
     {% render 'paginacion', paginate: paginate %}
   {% endpaginate %}
-</section>
 
-<div style="height: var(--space-16)"></div>
+  <div style="height: var(--space-16)"></div>
+</section>
 
 {% schema %}
 {
   "name": "Colección",
   "settings": [
     { "type": "range", "id": "por_pagina", "label": "Piezas por página", "min": 8, "max": 48, "step": 4, "default": 24 },
+    { "type": "checkbox", "id": "mostrar_cabecera", "label": "Mostrar título de la colección", "info": "Desactívalo si la plantilla tiene una portada de categoría.", "default": true },
+    {
+      "type": "select",
+      "id": "columnas",
+      "label": "Columnas en escritorio",
+      "options": [
+        { "value": "2", "label": "2 — piezas grandes" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "proporcion",
+      "label": "Proporción de imagen",
+      "options": [
+        { "value": "4 / 5", "label": "4:5 — retrato" },
+        { "value": "2 / 3", "label": "2:3 — alta" },
+        { "value": "1 / 1", "label": "1:1 — cuadrada" }
+      ],
+      "default": "4 / 5"
+    },
+    {
+      "type": "select",
+      "id": "tema",
+      "label": "Tema",
+      "options": [
+        { "value": "noche", "label": "Noche" },
+        { "value": "galeria", "label": "Galería (claro)" }
+      ],
+      "default": "noche"
+    },
     { "type": "checkbox", "id": "mostrar_filtros", "label": "Filtros (talla, precio, disponibilidad)", "info": "Se configuran en la app Search & Discovery de Shopify.", "default": true },
     { "type": "checkbox", "id": "mostrar_tags", "label": "Filtros por etiqueta (si no hay filtros)", "default": true }
   ]

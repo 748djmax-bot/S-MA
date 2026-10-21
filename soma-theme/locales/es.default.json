@@ -129,5 +129,11 @@
   "footer": {
     "derechos": "Todos los derechos reservados.",
     "pagos": "Métodos de pago"
+  },
+  "wallpapers": {
+    "descargar": "Descargar 4K",
+    "paso_1": "Toca «Descargar 4K».",
+    "paso_2": "Mantén presionada la imagen y guárdala en Fotos.",
+    "paso_3": "Ajustes → Fondo de pantalla → elige SØMA."
   }
 }
