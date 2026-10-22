@@ -16,10 +16,33 @@
         "label": "Tema de color",
         "info": "Noche: web, social, eventos. Galería: lookbook, prensa y exposición.",
         "options": [
-          { "value": "noche", "label": "Noche" },
-          { "value": "galeria", "label": "Galería" }
+          {
+            "value": "noche",
+            "label": "Noche"
+          },
+          {
+            "value": "galeria",
+            "label": "Galería"
+          }
         ],
         "default": "noche"
+      },
+      {
+        "type": "select",
+        "id": "encuadre_fotos",
+        "label": "Encuadre de fotos de producto",
+        "info": "Completo: se ve la prenda entera aunque las fotos tengan formatos distintos. Recortar: la foto llena el recuadro.",
+        "options": [
+          {
+            "value": "completo",
+            "label": "Completo (sin recortes)"
+          },
+          {
+            "value": "recortar",
+            "label": "Recortar para llenar"
+          }
+        ],
+        "default": "completo"
       },
       {
         "type": "checkbox",
@@ -62,9 +85,21 @@
   {
     "name": "Redes",
     "settings": [
-      { "type": "url", "id": "instagram", "label": "Instagram" },
-      { "type": "url", "id": "tiktok", "label": "TikTok" },
-      { "type": "url", "id": "soundcloud", "label": "SoundCloud" }
+      {
+        "type": "url",
+        "id": "instagram",
+        "label": "Instagram"
+      },
+      {
+        "type": "url",
+        "id": "tiktok",
+        "label": "TikTok"
+      },
+      {
+        "type": "url",
+        "id": "soundcloud",
+        "label": "SoundCloud"
+      }
     ]
   }
 ]

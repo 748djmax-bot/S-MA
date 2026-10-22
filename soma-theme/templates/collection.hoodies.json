@@ -45,8 +45,9 @@
         "mostrar_filtros": true,
         "mostrar_tags": false,
         "columnas": "2",
-        "proporcion": "4 / 5",
-        "tema": "noche"
+        "proporcion": "1 / 1",
+        "tema": "noche",
+        "encuadre": "recortar"
       }
     }
   },

@@ -50,6 +50,7 @@
     /* Opacidad */
     --opacidad-agotado: 0.5;
     --opacidad-grano: 0.06;
+    --ajuste-foto: {% if settings.encuadre_fotos == 'recortar' %}cover{% else %}contain{% endif %};
 
     /* Motion */
     --dur-corte: 120ms;

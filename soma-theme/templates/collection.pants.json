@@ -46,7 +46,8 @@
         "mostrar_tags": false,
         "columnas": "3",
         "proporcion": "2 / 3",
-        "tema": "noche"
+        "tema": "noche",
+        "encuadre": "recortar"
       }
     }
   },

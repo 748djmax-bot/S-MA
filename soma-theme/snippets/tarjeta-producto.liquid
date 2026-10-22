@@ -5,6 +5,7 @@
 
   @param {product} product - Producto a mostrar
   @param {number} [indice] - Posición en la lista
+  @param {string} [tamanos] - Atributo sizes de la imagen (según las columnas del grid)
 {% enddoc %}
 
 {%- liquid
@@ -20,6 +21,7 @@
     assign clases = clases | append: ' tarjeta--agotado'
   endunless
 
+  assign tamanos = tamanos | default: '(min-width: 1024px) 25vw, 50vw'
   assign loading = 'lazy'
   assign escalon = 0
   if indice
@@ -43,18 +45,18 @@
     {% if product.featured_media %}
       {{
         product.featured_media
-        | image_url: width: 900
+        | image_url: width: 1200
         | image_tag:
           loading: loading,
-          widths: '300, 450, 600, 900',
-          sizes: '(min-width: 1024px) 25vw, 50vw',
+          widths: '300, 450, 600, 900, 1200, 1600',
+          sizes: tamanos,
           alt: product.featured_media.alt | default: product.title
       }}
       {% if product.media.size > 1 %}
         {{
           product.media[1]
-          | image_url: width: 900
-          | image_tag: loading: 'lazy', widths: '300, 450, 600, 900', sizes: '(min-width: 1024px) 25vw, 50vw', alt: ''
+          | image_url: width: 1200
+          | image_tag: loading: 'lazy', widths: '300, 450, 600, 900, 1200, 1600', sizes: tamanos, alt: ''
         }}
       {% endif %}
     {% else %}

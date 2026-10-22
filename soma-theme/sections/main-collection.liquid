@@ -11,7 +11,7 @@
 
 <section
   class="coleccion coleccion--{{ section.settings.columnas }}col{% if section.settings.tema == 'galeria' %} tema-galeria{% endif %}"
-  style="--proporcion: {{ section.settings.proporcion }};"
+  style="--proporcion: {{ section.settings.proporcion }};{% case section.settings.encuadre %}{% when 'recortar' %} --ajuste-foto: cover;{% when 'completo' %} --ajuste-foto: contain;{% endcase %}"
 >
   {% if section.settings.mostrar_cabecera %}
   <div class="pagina coleccion__cabecera">
@@ -173,7 +173,17 @@
       {% if collection.products.size > 0 %}
         <ul class="grid-producto" role="list">
           {% for product in collection.products %}
-            <li>{% render 'tarjeta-producto', product: product, indice: forloop.index %}</li>
+            {%- liquid
+              case section.settings.columnas
+                when '2'
+                  assign tamanos = '(min-width: 1024px) 50vw, 50vw'
+                when '3'
+                  assign tamanos = '(min-width: 1024px) 33vw, 50vw'
+                else
+                  assign tamanos = '(min-width: 1024px) 25vw, 50vw'
+              endcase
+            -%}
+            <li>{% render 'tarjeta-producto', product: product, indice: forloop.index, tamanos: tamanos %}</li>
           {% endfor %}
         </ul>
       {% else %}
@@ -213,9 +223,21 @@
       "options": [
         { "value": "4 / 5", "label": "4:5 — retrato" },
         { "value": "2 / 3", "label": "2:3 — alta" },
+        { "value": "3 / 2", "label": "3:2 — horizontal" },
         { "value": "1 / 1", "label": "1:1 — cuadrada" }
       ],
       "default": "4 / 5"
+    },
+    {
+      "type": "select",
+      "id": "encuadre",
+      "label": "Encuadre de fotos",
+      "options": [
+        { "value": "global", "label": "Según la configuración del tema" },
+        { "value": "recortar", "label": "Recortar para llenar" },
+        { "value": "completo", "label": "Completo (sin recortes)" }
+      ],
+      "default": "global"
     },
     {
       "type": "select",

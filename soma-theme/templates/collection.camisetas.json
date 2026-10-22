@@ -38,8 +38,9 @@
         "mostrar_filtros": true,
         "mostrar_tags": false,
         "columnas": "4",
-        "proporcion": "4 / 5",
-        "tema": "galeria"
+        "proporcion": "3 / 2",
+        "tema": "galeria",
+        "encuadre": "recortar"
       }
     }
   },

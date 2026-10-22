@@ -49,7 +49,7 @@
   <div class="pagina grid-12">
     <div class="producto__galeria">
       {% for media in product.media %}
-        <figure class="producto__imagen" data-media-id="{{ media.id }}">
+        <figure class="producto__imagen" data-media-id="{{ media.id }}" style="aspect-ratio: {{ media.preview_image.aspect_ratio | default: 0.8 }};">
           {%- liquid
             assign carga = 'lazy'
             if forloop.first
