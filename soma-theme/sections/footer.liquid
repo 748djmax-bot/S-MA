@@ -47,6 +47,10 @@
       {% endif %}
     </div>
 
+    {% if section.settings.frase_gotica != blank %}
+      <p class="gotica-xl footer__gotica">{{ section.settings.frase_gotica | escape }}</p>
+    {% endif %}
+
     <div class="footer__base etiqueta">
       <span>&copy; {{ 'now' | date: '%Y' }} {{ shop.name | link_to: routes.root_url }} — {{ 'footer.derechos' | t }}</span>
 
@@ -75,6 +79,7 @@
       "label": "Frase de marca",
       "default": "Ropa para habitar la ciudad de noche."
     },
+    { "type": "text", "id": "frase_gotica", "label": "Firma en gótica (grande)", "default": "Hecho para la noche", "info": "Letra gótica: mayúscula inicial y minúsculas, nunca todo en mayúsculas. Vacío = sin gótica." },
     {
       "type": "checkbox",
       "id": "mostrar_pagos",

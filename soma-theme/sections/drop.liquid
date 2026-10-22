@@ -27,6 +27,9 @@
     </div>
 
     <div class="drop__cuerpo">
+      {% if section.settings.nombre_gotica != blank %}
+        <p class="gotica-xl drop__gotica">{{ section.settings.nombre_gotica | escape }}</p>
+      {% endif %}
       {% if section.settings.nombre != blank %}
         <h2 class="display-l revelado">{{ section.settings.nombre | escape }}</h2>
       {% endif %}
@@ -56,6 +59,7 @@
     { "type": "checkbox", "id": "en_vivo", "label": "Drop activo (tag naranja)", "default": true },
     { "type": "text", "id": "codigo", "label": "Código", "default": "SØ/002" },
     { "type": "text", "id": "nombre", "label": "Nombre", "default": "SØ/002 — SODIO" },
+    { "type": "text", "id": "nombre_gotica", "label": "Nombre del drop en gótica", "default": "Sodio", "info": "Letra gótica: mayúscula inicial y minúsculas, nunca todo en mayúsculas. Vacío = sin gótica." },
     { "type": "text", "id": "texto", "label": "Texto", "default": "150 piezas. Sin reposición." },
     { "type": "text", "id": "fecha", "label": "Fecha", "default": "2026.11.14 — 22:00" },
     { "type": "text", "id": "coordenadas", "label": "Coordenadas", "default": "N 00°00′ W 00°00′" },

@@ -20,6 +20,18 @@
   endif
   assign numero = section.settings.numero
   assign letras = titulo | size
+
+  assign gotica = section.settings.nombre_gotica
+  if gotica == blank and section.settings.gotica_auto
+    case estilo
+      when 'capa'
+        assign gotica = 'Capa'
+      when 'pierna'
+        assign gotica = 'Pierna'
+      when 'senal'
+        assign gotica = 'Señal'
+    endcase
+  endif
 -%}
 
 <section
@@ -43,6 +55,7 @@
         <div class="portada__titulos portada__ajuste">
           <span class="portada__eco display-xl" aria-hidden="true">{{ titulo | escape }}</span>
           <h1 class="portada__titulo display-xl" id="portada-titulo-{{ section.id }}">{{ titulo | escape }}</h1>
+          {% if gotica != blank %}<p class="gotica-xl portada__gotica">{{ gotica | escape }}</p>{% endif %}
           {% if section.settings.claim != blank %}
             <p class="subtitulo portada__claim">{{ section.settings.claim | escape }}</p>
           {% endif %}
@@ -61,6 +74,7 @@
         <div class="portada__regla">
           <p class="micro suave">{{ numero }} — {{ section.settings.etiqueta | escape }}</p>
           <div class="portada__escala" aria-hidden="true"></div>
+          {% if gotica != blank %}<p class="gotica-xl portada__gotica">{{ gotica | escape }}</p>{% endif %}
           {% if section.settings.claim != blank %}
             <p class="subtitulo">{{ section.settings.claim | escape }}</p>
           {% endif %}
@@ -74,9 +88,7 @@
         <div class="portada__texto portada__ajuste">
           <p class="micro suave">{{ numero }} — {{ section.settings.etiqueta | escape }}</p>
           <h1 class="display-xl" id="portada-titulo-{{ section.id }}">{{ titulo | escape }}</h1>
-          {% if section.settings.nombre_gotica != blank %}
-            <p class="gotica-l">{{ section.settings.nombre_gotica | escape }}</p>
-          {% endif %}
+          {% if gotica != blank %}<p class="gotica-l">{{ gotica | escape }}</p>{% endif %}
           {% if section.settings.claim != blank %}
             <p class="subtitulo">{{ section.settings.claim | escape }}</p>
           {% endif %}
@@ -99,6 +111,7 @@
       <div class="pagina portada__interior">
         <div class="portada__texto portada__ajuste">
           <h1 class="display-xl" id="portada-titulo-{{ section.id }}">{{ titulo | escape }}</h1>
+          {% if gotica != blank %}<p class="gotica-l">{{ gotica | escape }}</p>{% endif %}
           {% if section.settings.claim != blank %}
             <p class="subtitulo">{{ section.settings.claim | escape }}</p>
           {% endif %}
@@ -138,7 +151,8 @@
     { "type": "text", "id": "numero", "label": "Número", "default": "01" },
     { "type": "text", "id": "etiqueta", "label": "Etiqueta", "default": "Outerwear" },
     { "type": "text", "id": "claim", "label": "Bajada" },
-    { "type": "text", "id": "nombre_gotica", "label": "Nombre en gótica (solo Base)", "info": "Una vez por página. Mayúscula inicial." },
+    { "type": "text", "id": "nombre_gotica", "label": "Nombre en gótica", "info": "Mayúscula inicial y minúsculas. Vacío = Capa / Pierna / Señal según el diseño." },
+    { "type": "checkbox", "id": "gotica_auto", "label": "Usar nombre gótico por defecto si está vacío", "default": true },
     { "type": "text", "id": "banda", "label": "Texto de la banda naranja (solo Señal)", "default": "Talla única · ajustable" },
     { "type": "image_picker", "id": "imagen", "label": "Imagen", "info": "Vacío = imagen de la colección o primer producto." }
   ],

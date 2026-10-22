@@ -7,6 +7,9 @@
     <div class="acceso__texto">
       <p class="etiqueta suave">{{ section.settings.etiqueta | escape }}</p>
       <h2 class="display-l" style="margin-top: var(--space-4)">{{ section.settings.titulo | escape }}</h2>
+      {% if section.settings.nombre_gotica != blank %}
+        <p class="gotica-l" style="margin-top: var(--space-2)">{{ section.settings.nombre_gotica | escape }}</p>
+      {% endif %}
     </div>
 
     <div class="acceso__campos">
@@ -50,6 +53,7 @@
   "settings": [
     { "type": "text", "id": "etiqueta", "label": "Etiqueta", "default": "ACCESO" },
     { "type": "text", "id": "titulo", "label": "Título", "default": "BECOME THE SIGNAL." },
+    { "type": "text", "id": "nombre_gotica", "label": "Nombre en gótica", "default": "Pertenencia", "info": "Letra gótica: mayúscula inicial y minúsculas, nunca todo en mayúsculas. Vacío = sin gótica." },
     { "type": "text", "id": "texto", "label": "Texto", "default": "Acceso anticipado para quienes ya estaban." }
   ],
   "presets": [{ "name": "Acceso anticipado" }]

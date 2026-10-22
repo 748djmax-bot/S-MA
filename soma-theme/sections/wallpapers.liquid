@@ -9,6 +9,9 @@
       <div class="wallpapers__titulo">
         <p class="micro suave">{{ section.settings.etiqueta | escape }}</p>
         <h1 class="display-xl">{{ section.settings.titulo | escape }}</h1>
+        {% if section.settings.nombre_gotica != blank %}
+          <p class="gotica-xl">{{ section.settings.nombre_gotica | escape }}</p>
+        {% endif %}
       </div>
       <div class="wallpapers__intro">
         {% if section.settings.texto != blank %}
@@ -70,6 +73,7 @@
   "settings": [
     { "type": "text", "id": "etiqueta", "label": "Etiqueta", "default": "Descargas — 4K" },
     { "type": "text", "id": "titulo", "label": "Título", "default": "WALLPAPERS." },
+    { "type": "text", "id": "nombre_gotica", "label": "Nombre en gótica", "default": "Fondos de la noche", "info": "Letra gótica: mayúscula inicial y minúsculas, nunca todo en mayúsculas. Vacío = sin gótica." },
     { "type": "richtext", "id": "texto", "label": "Texto", "default": "<p>La señal también en la pantalla. Fondos 4K para móvil con los logos oficiales de SØMA.</p>" },
     { "type": "text", "id": "legal", "label": "Nota legal", "default": "Uso personal. Los logos de SØMA no pueden usarse con fines comerciales sin permiso." }
   ],

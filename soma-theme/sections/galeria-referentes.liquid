@@ -6,7 +6,12 @@
 <section class="seccion seccion--hairline referentes">
   <div class="pagina">
     <div class="cabecera-seccion">
-      <h2 class="titulo">{{ section.settings.titulo | escape }}</h2>
+      <div class="cabecera-seccion__nombre">
+        <h2 class="titulo">{{ section.settings.titulo | escape }}</h2>
+        {% if section.settings.nombre_gotica != blank %}
+          <span class="gotica-l">{{ section.settings.nombre_gotica | escape }}</span>
+        {% endif %}
+      </div>
       {% if section.settings.subtitulo != blank %}
         <p class="etiqueta suave">{{ section.settings.subtitulo | escape }}</p>
       {% endif %}
@@ -41,6 +46,7 @@
   "name": "Referentes",
   "settings": [
     { "type": "text", "id": "titulo", "label": "Título", "default": "REFERENTES" },
+    { "type": "text", "id": "nombre_gotica", "label": "Nombre en gótica", "default": "Concreto y noche", "info": "Letra gótica: mayúscula inicial y minúsculas, nunca todo en mayúsculas. Vacío = sin gótica." },
     { "type": "text", "id": "subtitulo", "label": "Subtítulo", "default": "Concreto · noche · señal" }
   ],
   "blocks": [

@@ -96,7 +96,7 @@
           {% endif %}
         </div>
 
-        <h1 class="titulo producto__titulo">{{ product.title | escape }}</h1>
+        <h1 class="{% if section.settings.titulo_gotica %}gotica-l producto__titulo--gotica{% else %}titulo{% endif %} producto__titulo">{{ product.title | escape }}</h1>
 
         <p class="producto__precio">
           <span data-precio>{{ variante.price | money }}</span>
@@ -320,6 +320,7 @@
 {
   "name": "Producto",
   "settings": [
+    { "type": "checkbox", "id": "titulo_gotica", "label": "Nombre de la pieza en letra gótica", "default": true },
     { "type": "checkbox", "id": "mostrar_cantidad", "label": "Selector de cantidad", "default": false },
     { "type": "checkbox", "id": "mostrar_pago_dinamico", "label": "Botón de pago dinámico (Shop Pay, etc.)", "default": false },
     { "type": "checkbox", "id": "mostrar_avisame", "label": "«Avísame» en piezas agotadas", "info": "Llega como mensaje de contacto al email de la tienda.", "default": true }
